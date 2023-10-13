@@ -1,12 +1,14 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
 import React, {useState} from 'react';
+import { Link } from 'expo-router';
 
 export default function App() {
   const [colourChange, setColourChange] = useState(true)
   return (
     <View style={colourChange ? styles.container : styles.change}>
       <Text style={colourChange ? styles.black : styles.white} onPress={() => setColourChange(!colourChange)}>Driving App</Text>
+      <Link href="/">Start</Link>
       <StatusBar style="auto" />
     </View>
   );
