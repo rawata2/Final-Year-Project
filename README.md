@@ -11,7 +11,7 @@ We aim to design the mobile  app “RoadReady” that transforms the way people 
 
 ### To deliver this we will use the following:
 - <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/React-icon.svg/539px-React-icon.svg.png" width="30" height="25"> **React-Native** for the frontend to effectively develop and deploy our app. Figma will serve as our design tool. 
-- <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b0/Openstreetmap_logo.svg/768px-Openstreetmap_logo.svg.png" width="32" height="29"> **OpenSteetMap** an open sourced mapping tool allows us to create accurate routes.
+- <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b0/Openstreetmap_logo.svg/768px-Openstreetmap_logo.svg.png" width="32" height="29"> **OpenStreetMap** an open sourced mapping tool allows us to create accurate routes.
 
 - <img src="https://assets.stickpng.com/images/5847f40ecef1014c0b5e488a.png" width="20" height="25"> **Firebase** for the managing the database including datasets such as theory test Qs, Routes, User Login + Sign-Up.
 
