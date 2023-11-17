@@ -1,4 +1,4 @@
-import { KeyboardAvoidingView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { Button, KeyboardAvoidingView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React, {useState, useEffect} from 'react'
 import { TextInput } from 'react-native-gesture-handler'
 import { auth } from '../firebaseConfig'
@@ -60,6 +60,7 @@ const LoginScreen = () => {
             />
         </View>
 
+        <Button onPress={navigation.replace("Register")}>Register</Button>
         <View style={styles.buttonContainer}>
             <TouchableOpacity
             onPress={handleLogin}
