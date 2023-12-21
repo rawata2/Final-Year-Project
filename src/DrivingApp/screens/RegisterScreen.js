@@ -1,46 +1,105 @@
-import { View, Text,TextInput, Button, Keyboard, Alert,StyleSheet } from 'react-native'
-import React, {useState} from 'react'
-import { writeUserData } from '../firebaseConfig'
+import { View, Text,TextInput, Button, Keyboard, Alert,StyleSheet, TouchableOpacity } from 'react-native'
+import React, {useState, useEffect} from 'react'
+import { writeUserData, data} from '../firebaseConfig'
+import { useNavigation } from '@react-navigation/core'
+import { auth } from '../firebaseConfig'
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth"
 
 const RegisterScreen = () => {
-const [name, setName] = useState('')
-const [phone, setPhone] = useState('')
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const navigation = useNavigation()
 
-const onChanged = (text) => {
-    let newText = '';
-    let numbers = '0123456789';
+  useEffect(() => {
+    const unsubscribe = auth.onAuthStateChanged(user => {
+      if (user) {
+        navigation.replace("Home")
+      }
+    })
 
-    for (var i=0; i < text.length; i++) {
-        if(numbers.indexOf(text[i]) > -1 ) {
-            newText = newText + text[i];
-        }
-        else {
-            alert("please enter numbers only");
-        }
-    }
-    setPhone(newText);
+    return unsubscribe
+  }, [])
+
+
+  const handleSignUp = () => {
+    createUserWithEmailAndPassword(auth, email, password)
+    .then(userCredentials => {
+      const user = userCredentials.user;
+      console.log('Registered with:', user.email);
+    })
+    .catch(error => alert(error.message))
 }
+
   return (
     <View>
     <TextInput
-    placeholder='Username'
-    value={name}
-    onChangeText={text => setName(text)}
+    placeholder='Email'
+    value={email}
+    onChangeText={text => setEmail(text)}
     />
     <TextInput
-    placeholder='Phone Number'
-    value={phone}
-    onChangeText={text => onChanged(text)}
+    placeholder='Password'
+    value={password}
+    onChangeText={text => setPassword(text)}
     maxLength={10}
     />
      <View>
-        <Button 
-            title='submit'
-            onPress={() => [writeUserData(name, phone), console.log("clicked")]}
-         />
+     <TouchableOpacity
+            onPress={handleSignUp}
+            style={[styles.button, styles.buttonOutline]}
+            >
+                <Text style={styles.buttonOutlineText}>Sign Up</Text>
+            </TouchableOpacity>
     </View>
 </View>
   )
 }
 
 export default RegisterScreen
+
+const styles = StyleSheet.create({
+  container:{
+      flex: 1,
+      justifyContent: 'center',
+      alignItems: 'center',
+  },
+   inputContainer: {
+  width: '80%'
+},
+input: {
+  backgroundColor: 'white',
+  paddingHorizontal: 15,
+  paddingVertical: 10,
+  borderRadius: 10,
+  marginTop: 5,
+},
+buttonContainer: {
+  width: '60%',
+  justifyContent: 'center',
+  alignItems: 'center',
+  marginTop: 40,
+},
+button: {
+  backgroundColor: '#0782F9',
+  width: '100%',
+  padding: 15,
+  borderRadius: 10,
+  alignItems: 'center',
+},
+buttonOutline: {
+  backgroundColor: 'white',
+  marginTop: 5,
+  borderColor: '#0782F9',
+  borderWidth: 2,
+},
+buttonText: {
+  color: 'white',
+  fontWeight: '700',
+  fontSize: 16,
+},
+buttonOutlineText: {
+  color: '#0782F9',
+  fontWeight: '700',
+  fontSize: 16,
+},
+})

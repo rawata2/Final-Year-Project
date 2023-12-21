@@ -60,19 +60,20 @@ const LoginScreen = () => {
             />
         </View>
 
-        <Button onPress={navigation.replace("Register")}>Register</Button>
-        <View style={styles.buttonContainer}>
+        <View>
             <TouchableOpacity
             onPress={handleLogin}
             style={styles.button}
             >
                 <Text style={styles.buttonText}>Sign In</Text>
             </TouchableOpacity>
+        </View>
+        <View>
             <TouchableOpacity
-            onPress={handleSignUp}
-            style={[styles.button, styles.buttonOutline]}
+            onPress={() => navigation.replace("Register")}
+            style={styles.button}
             >
-                <Text style={styles.buttonOutlineText}>Sign Up</Text>
+                <Text style={styles.buttonText}>Register</Text>
             </TouchableOpacity>
         </View>
     </KeyboardAvoidingView>

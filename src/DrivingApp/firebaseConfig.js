@@ -29,18 +29,19 @@ const firebaseConfig = {
   function writeUserData(userID, phone) {
     const db = getDatabase();
     const reference = ref(db, 'users/' + userID);
-
+    
     set(reference, {
       phoneNumber : phone,
     });
 
-  const readRef = ref(db, 'users/' + userID);
-  onValue(readRef, (snapshot) => {
-    const data = snapshot.val();
-    updateCurrentUser(postElement, data);
-  })
+    const readRef = ref(db, 'users/' + userID);
+    onValue(readRef, (snapshot) => {
+      const data = snapshot.val();
+      console.log(data)
+      updateCurrentUser(postElement, data);
+    })
   }
   
-  export { auth, writeUserData, onValue };
+  export { auth, writeUserData};
 // For more information on how to access Firebase in your project,
 // see the Firebase documentation: https://firebase.google.com/docs/web/setup#access-firebase
