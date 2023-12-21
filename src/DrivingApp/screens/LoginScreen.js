@@ -1,4 +1,4 @@
-import { KeyboardAvoidingView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { Button, KeyboardAvoidingView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React, {useState, useEffect} from 'react'
 import { TextInput } from 'react-native-gesture-handler'
 import { auth } from '../firebaseConfig'
@@ -60,18 +60,20 @@ const LoginScreen = () => {
             />
         </View>
 
-        <View style={styles.buttonContainer}>
+        <View>
             <TouchableOpacity
             onPress={handleLogin}
             style={styles.button}
             >
                 <Text style={styles.buttonText}>Sign In</Text>
             </TouchableOpacity>
+        </View>
+        <View>
             <TouchableOpacity
-            onPress={handleSignUp}
-            style={[styles.button, styles.buttonOutline]}
+            onPress={() => navigation.replace("Register")}
+            style={styles.button}
             >
-                <Text style={styles.buttonOutlineText}>Sign Up</Text>
+                <Text style={styles.buttonText}>Register</Text>
             </TouchableOpacity>
         </View>
     </KeyboardAvoidingView>

@@ -1,6 +1,6 @@
 import { useNavigation } from '@react-navigation/core'
 import React from 'react'
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { Button, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { auth } from '../firebaseConfig'
 
 const HomeScreen = () => {
@@ -19,7 +19,7 @@ const HomeScreen = () => {
     <View style={styles.container}>
       <Text>Email: {auth.currentUser?.email}</Text>
       <TouchableOpacity
-        onPress={handleSignOut}
+        onPress={() => handleSignOut()}
         style={styles.button}
       >
         <Text style={styles.buttonText}>Sign out</Text>
