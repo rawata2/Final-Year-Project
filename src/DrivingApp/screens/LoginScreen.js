@@ -10,7 +10,6 @@ import { Padding, Color, Border, FontSize, FontFamily } from "../components/Glob
 const LoginScreen = () => {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
-    const [eye, setEye] = useState(false)
 
     const navigation = useNavigation()
 
@@ -86,7 +85,6 @@ const LoginScreen = () => {
             style={styles.pheyeIcon}
             contentFit="cover"
             source={require("../assets/pheye.png")}
-            onPress={setEye(true)}
           />
             </View>
         </View>
