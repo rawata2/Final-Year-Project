@@ -1,4 +1,5 @@
 import { initializeApp } from 'firebase/app';
+import { getFirestore } from "firebase/firestore";
 import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth';
 import {getDatabase, onValue, ref, set } from 'firebase/database';
 
@@ -25,23 +26,25 @@ const firebaseConfig = {
   const app = initializeApp(firebaseConfig);
   
   const auth = getAuth();
-  
-  function writeUserData(userID, phone) {
-    const db = getDatabase();
-    const reference = ref(db, 'users/' + userID);
-    
-    set(reference, {
-      phoneNumber : phone,
-    });
 
-    const readRef = ref(db, 'users/' + userID);
-    onValue(readRef, (snapshot) => {
-      const data = snapshot.val();
-      console.log(data)
-      updateCurrentUser(postElement, data);
-    })
-  }
+  const db = getFirestore(app);
   
-  export { auth, writeUserData};
+  // function writeUserData(userID, phone) {
+  //   const db = getDatabase();
+  //   const reference = ref(db, 'users/' + userID);
+    
+  //   set(reference, {
+  //     phoneNumber : phone,
+  //   });
+
+  //   const readRef = ref(db, 'users/' + userID);
+  //   onValue(readRef, (snapshot) => {
+  //     const data = snapshot.val();
+  //     console.log(data)
+  //     updateCurrentUser(postElement, data);
+  //   })
+  // }
+  
+  export { auth, db};
 // For more information on how to access Firebase in your project,
 // see the Firebase documentation: https://firebase.google.com/docs/web/setup#access-firebase

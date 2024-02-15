@@ -2,12 +2,14 @@ import { View, Text,TextInput, Button, Keyboard, Alert,StyleSheet, TouchableOpac
 import React, {useState, useEffect} from 'react'
 import { writeUserData, data} from '../firebaseConfig'
 import { useNavigation } from '@react-navigation/core'
-import { auth } from '../firebaseConfig'
+import { auth, db } from '../firebaseConfig'
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth"
+import { doc, getDoc, setDoc, collection } from "firebase/firestore";
 
 const RegisterScreen = () => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [docState, setDocState] = useState()
   const navigation = useNavigation()
 
   useEffect(() => {
@@ -20,12 +22,32 @@ const RegisterScreen = () => {
     return unsubscribe
   }, [])
 
+  useEffect(() => {
+    async function fetchDoc(){
+      let docSnap = await getDoc(docRef)
+      setDocState(docSnap.data())
+    }
+    fetchDoc()
+  }, [])
+
+  console.log(docState)
+  console.log(auth)
+  console.log(auth.currentUser)
+  const docRef = doc(db, "cities", "SF");
+  // const docSnap = getDoc(docRef);
+  // getDoc(docRef).then((d) => {console.log(d.data())})
+  const citiesRef = collection(db, "cities");
+
 
   const handleSignUp = () => {
     createUserWithEmailAndPassword(auth, email, password)
     .then(userCredentials => {
       const user = userCredentials.user;
+      setDoc(doc(db, "user", email), {
+        email: email, test: "1"
+      });
       console.log('Registered with:', user.email);
+      console.log(userCredentials)
     })
     .catch(error => alert(error.message))
 }
@@ -42,6 +64,7 @@ const RegisterScreen = () => {
     value={password}
     onChangeText={text => setPassword(text)}
     maxLength={10}
+    secureTextEntry
     />
      <View>
      <TouchableOpacity
