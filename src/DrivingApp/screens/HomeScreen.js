@@ -36,7 +36,11 @@ const HomeScreen = () => {
         />
         <Text style={styles.createRoutes}>Daily Tasks</Text>
       </View>
-      <View style={[styles.rectangleGroup, styles.rectangleLayout]}>
+      <TouchableOpacity
+        style={[styles.rectangleGroup, styles.rectangleLayout]}
+        activeOpacity={0.2}
+        onPress={() => navigation.navigate("FindInstructors")}
+      >
         <View style={styles.groupChild} />
         <Image
           style={[styles.image5Icon, styles.iconPosition]}
@@ -44,7 +48,7 @@ const HomeScreen = () => {
           source={require("../assets/image-511.png")}
         />
         <Text style={styles.createRoutes}>Find instructors</Text>
-      </View>
+        </TouchableOpacity>
       <View style={[styles.rectangleContainer, styles.rectangleLayout]}>
         <View style={styles.groupChild} />
         <Image
@@ -55,6 +59,10 @@ const HomeScreen = () => {
         <Text style={styles.createRoutes}>Create routes</Text>
       </View>
       <View style={[styles.groupView, styles.groupLayout]}>
+        <TouchableOpacity
+        activeOpacity={0.2}
+        onPress={() => navigation.navigate("TheoryTest")}
+      >
         <View style={styles.rectangleView} />
         <Image
           style={styles.image3Icon}
@@ -62,6 +70,7 @@ const HomeScreen = () => {
           source={require("../assets/image-311.png")}
         />
         <Text style={[styles.theoryTest, styles.testTypo]}>Theory Test</Text>
+        </TouchableOpacity>
       </View>
       <TouchableOpacity
         style={[styles.groupTouchableopacity, styles.groupLayout]}

@@ -5,6 +5,12 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import LoginScreen from './screens/LoginScreen';
 import HomeScreen from './screens/HomeScreen';
 import RegisterScreen from './screens/RegisterScreen';
+import TheoryTest1 from './screens/TheoryTest1';
+import DrivingTest from './screens/DrivingTest';
+import FindInstuctors from './screens/FindInstructors';
+import TestCentre1 from './screens/TestCentre1';
+import PracticeQs from './screens/PracticeQs';
+import SidePanel from './screens/SidePanel';
 
 const Stack = createNativeStackNavigator();
 
@@ -15,6 +21,12 @@ export default function App() {
         <Stack.Screen name="Home" component={HomeScreen} />
         <Stack.Screen options={{headerShown: false}} name="Login" component={LoginScreen} />
         <Stack.Screen name="Register" component={RegisterScreen} />
+        <Stack.Screen name="TheoryTest" component={TheoryTest1} />
+        <Stack.Screen name="DrivingTest" component={DrivingTest} />
+        <Stack.Screen name="FindInstructors" component={FindInstuctors} />
+        <Stack.Screen name="TestCentre" component={TestCentre1} />
+        <Stack.Screen name="Practice" component={PracticeQs} />
+        <Stack.Screen name="SidePanel" component={SidePanel} />
       </Stack.Navigator>
     </NavigationContainer>
   );
