@@ -1,166 +1,84 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Text, StyleSheet, View } from "react-native";
 import { Image } from "expo-image";
 import DropDownPicker from "react-native-dropdown-picker";
 import { FontSize, FontFamily, Color, Border, Padding } from "../components/GlobalStyles";
+import { doc, getDoc, setDoc, collection } from "firebase/firestore";
+import { auth, db } from '../firebaseConfig'
+import { reload } from "firebase/auth";
 
-const PracticeQs = () => {
-  const [frameDropdownOpen, setFrameDropdownOpen] = useState(false);
-  const [frameDropdownValue, setFrameDropdownValue] = useState("All counties");
-  const [frameDropdownItems, setFrameDropdownItems] = useState([
-    { value: "Carlow", label: "Carlow" },
-    { value: "Cavan", label: "Cavan" },
-    { value: "Clare", label: "Clare" },
-    { value: "Cork", label: "Cork" },
-    { value: "Donegal", label: "Donegal" },
-    { value: "Dublin", label: "Dublin" },
-    { value: "Galway", label: "Galway" },
-    { value: "Kerry", label: "Kerry" },
-    { value: "Kildare", label: "Kildare" },
-    { value: "Kilkenny", label: "Kilkenny" },
-    { value: "Laois", label: "Laois" },
-    { value: "Leitrim", label: "Leitrim" },
-    { value: "Limerick", label: "Limerick" },
-    { value: "Longford", label: "Longford" },
-    { value: "Louth", label: "Louth" },
-    { value: "Mayo", label: "Mayo" },
-    { value: "Meath", label: "Meath" },
-    { value: "Monaghan", label: "Monaghan" },
-    { value: "Offaly", label: "Offaly" },
-    { value: "Roscommon", label: "Roscommon" },
-    { value: "Sligo", label: "Sligo" },
-    { value: "Tipperary", label: "Tipperary" },
-    { value: "Waterford", label: "Waterford" },
-    { value: "Westmeath", label: "Westmeath" },
-    { value: "Wexford", label: "Wexford" },
-    { value: "Wicklow", label: "Wicklow" },
-  ]);
-  const [frameDropdown1Open, setFrameDropdown1Open] = useState(false);
-  const [frameDropdown1Value, setFrameDropdown1Value] =
-    useState("All counties");
-  const [frameDropdown1Items, setFrameDropdown1Items] = useState([
-    { value: "Carlow", label: "Carlow" },
-    { value: "Cavan", label: "Cavan" },
-    { value: "Clare", label: "Clare" },
-    { value: "Cork", label: "Cork" },
-    { value: "Donegal", label: "Donegal" },
-    { value: "Dublin", label: "Dublin" },
-    { value: "Galway", label: "Galway" },
-    { value: "Kerry", label: "Kerry" },
-    { value: "Kildare", label: "Kildare" },
-    { value: "Kilkenny", label: "Kilkenny" },
-    { value: "Laois", label: "Laois" },
-    { value: "Leitrim", label: "Leitrim" },
-    { value: "Limerick", label: "Limerick" },
-    { value: "Longford", label: "Longford" },
-    { value: "Louth", label: "Louth" },
-    { value: "Mayo", label: "Mayo" },
-    { value: "Meath", label: "Meath" },
-    { value: "Monaghan", label: "Monaghan" },
-    { value: "Offaly", label: "Offaly" },
-    { value: "Roscommon", label: "Roscommon" },
-    { value: "Sligo", label: "Sligo" },
-    { value: "Tipperary", label: "Tipperary" },
-    { value: "Waterford", label: "Waterford" },
-    { value: "Westmeath", label: "Westmeath" },
-    { value: "Wexford", label: "Wexford" },
-    { value: "Wicklow", label: "Wicklow" },
-  ]);
-  const [frameDropdown2Open, setFrameDropdown2Open] = useState(false);
-  const [frameDropdown2Value, setFrameDropdown2Value] =
-    useState("All counties");
-  const [frameDropdown2Items, setFrameDropdown2Items] = useState([
-    { value: "Carlow", label: "Carlow" },
-    { value: "Cavan", label: "Cavan" },
-    { value: "Clare", label: "Clare" },
-    { value: "Cork", label: "Cork" },
-    { value: "Donegal", label: "Donegal" },
-    { value: "Dublin", label: "Dublin" },
-    { value: "Galway", label: "Galway" },
-    { value: "Kerry", label: "Kerry" },
-    { value: "Kildare", label: "Kildare" },
-    { value: "Kilkenny", label: "Kilkenny" },
-    { value: "Laois", label: "Laois" },
-    { value: "Leitrim", label: "Leitrim" },
-    { value: "Limerick", label: "Limerick" },
-    { value: "Longford", label: "Longford" },
-    { value: "Louth", label: "Louth" },
-    { value: "Mayo", label: "Mayo" },
-    { value: "Meath", label: "Meath" },
-    { value: "Monaghan", label: "Monaghan" },
-    { value: "Offaly", label: "Offaly" },
-    { value: "Roscommon", label: "Roscommon" },
-    { value: "Sligo", label: "Sligo" },
-    { value: "Tipperary", label: "Tipperary" },
-    { value: "Waterford", label: "Waterford" },
-    { value: "Westmeath", label: "Westmeath" },
-    { value: "Wexford", label: "Wexford" },
-    { value: "Wicklow", label: "Wicklow" },
-  ]);
-  const [frameDropdown3Open, setFrameDropdown3Open] = useState(false);
-  const [frameDropdown3Value, setFrameDropdown3Value] =
-    useState("All counties");
-  const [frameDropdown3Items, setFrameDropdown3Items] = useState([
-    { value: "Carlow", label: "Carlow" },
-    { value: "Cavan", label: "Cavan" },
-    { value: "Clare", label: "Clare" },
-    { value: "Cork", label: "Cork" },
-    { value: "Donegal", label: "Donegal" },
-    { value: "Dublin", label: "Dublin" },
-    { value: "Galway", label: "Galway" },
-    { value: "Kerry", label: "Kerry" },
-    { value: "Kildare", label: "Kildare" },
-    { value: "Kilkenny", label: "Kilkenny" },
-    { value: "Laois", label: "Laois" },
-    { value: "Leitrim", label: "Leitrim" },
-    { value: "Limerick", label: "Limerick" },
-    { value: "Longford", label: "Longford" },
-    { value: "Louth", label: "Louth" },
-    { value: "Mayo", label: "Mayo" },
-    { value: "Meath", label: "Meath" },
-    { value: "Monaghan", label: "Monaghan" },
-    { value: "Offaly", label: "Offaly" },
-    { value: "Roscommon", label: "Roscommon" },
-    { value: "Sligo", label: "Sligo" },
-    { value: "Tipperary", label: "Tipperary" },
-    { value: "Waterford", label: "Waterford" },
-    { value: "Westmeath", label: "Westmeath" },
-    { value: "Wexford", label: "Wexford" },
-    { value: "Wicklow", label: "Wicklow" },
-  ]);
-  const [frameDropdown4Open, setFrameDropdown4Open] = useState(false);
-  const [frameDropdown4Value, setFrameDropdown4Value] =
-    useState("All counties");
-  const [frameDropdown4Items, setFrameDropdown4Items] = useState([
-    { value: "Carlow", label: "Carlow" },
-    { value: "Cavan", label: "Cavan" },
-    { value: "Clare", label: "Clare" },
-    { value: "Cork", label: "Cork" },
-    { value: "Donegal", label: "Donegal" },
-    { value: "Dublin", label: "Dublin" },
-    { value: "Galway", label: "Galway" },
-    { value: "Kerry", label: "Kerry" },
-    { value: "Kildare", label: "Kildare" },
-    { value: "Kilkenny", label: "Kilkenny" },
-    { value: "Laois", label: "Laois" },
-    { value: "Leitrim", label: "Leitrim" },
-    { value: "Limerick", label: "Limerick" },
-    { value: "Longford", label: "Longford" },
-    { value: "Louth", label: "Louth" },
-    { value: "Mayo", label: "Mayo" },
-    { value: "Meath", label: "Meath" },
-    { value: "Monaghan", label: "Monaghan" },
-    { value: "Offaly", label: "Offaly" },
-    { value: "Roscommon", label: "Roscommon" },
-    { value: "Sligo", label: "Sligo" },
-    { value: "Tipperary", label: "Tipperary" },
-    { value: "Waterford", label: "Waterford" },
-    { value: "Westmeath", label: "Westmeath" },
-    { value: "Wexford", label: "Wexford" },
-    { value: "Wicklow", label: "Wicklow" },
-  ]);
+const PracticeQs = (props) => {
+  const [num, setNum] = useState("1")
+  const [docState, setDocState] = useState()
+  const [q, setQ] = useState()
+  const [a1, setA1] = useState()
+  const [a2, setA2] = useState()
+  const [a3, setA3] = useState()
+  const [a4, setA4] = useState()
+  const [ans, setAns] = useState()
+  const [count, setCount] = useState(0)
+  const [cat, setCat] = useState(0)
+  const [select, setSelect] = useState()
+  const [cat1, setCat1] = useState([])
+  const [cat2, setCat2] = useState([])
+  const [cat3, setCat3] = useState([])
+  const [cat4, setCat4] = useState([])
+  const [cat5, setCat5] = useState([])
+  
+  let categories = props.route.params.categories
+  const limit = 1
+  
+  function NextQ(){
+    setCount(count + 1)
+    if(cat == (categories.length - 1)){
+      setCat(0)
+    }
+    else if(Number(num) == limit){
+      setNum("1")
+      setCat(cat + 1)
+    }
+    else if(Number(num) < limit){
+      setNum((Number(num) + 1).toString())
+    }
+    if(ans == select){
+      switch (cat) {
+        case 0:
+          setCat1(cat1.concat(num))
+          break;
+        case 1:
+          setCat2(cat2.concat(num))
+          break;
+        case 2:
+          setCat3(cat3.concat(num))
+          break;
+        case 3:
+          setCat4(cat4.concat(num))
+          break;
+        case 4:
+          setCat5(cat5.concat(num))
+          break;
+      }
+    }
+  }
+
+  useEffect(() => {
+    async function fetchDoc(){
+      let docSnap = await getDoc(docRef)
+      setDocState(docSnap.data())
+    }
+    fetchDoc()
+  }, [])
+
+  const testRef = collection(db, "Test");
+  const docRef = doc(db, categories[cat], num);
+  getDoc(docRef).then((d) => 
+  {console.log(d.data()), setA1(d.data().A1), setA2(d.data().A2), setA3(d.data().A3), setA4(d.data().A4), setAns(d.data().AA), setQ(d.data().Q) })
 
   return (
+    <div>
+    {(() => {
+      if (count < 5) {
+      return(
     <View style={styles.practiceQs}>
       <View style={styles.frame}>
         <View style={styles.header}>
@@ -169,19 +87,6 @@ const PracticeQs = () => {
             style={styles.iconHamburgerMenu}
             contentFit="cover"
             source={require("../assets/-icon-hamburger-menu1.png")}
-          />
-        </View>
-        <View style={styles.wrapper}>
-          <DropDownPicker
-            style={styles.dropdownpicker}
-            open={frameDropdownOpen}
-            setOpen={setFrameDropdownOpen}
-            value={frameDropdownValue}
-            setValue={setFrameDropdownValue}
-            placeholder="All counties"
-            items={frameDropdownItems}
-            labelStyle={styles.frameDropdownValue}
-            dropDownContainerStyle={styles.frameDropdowndropDownContainer}
           />
         </View>
       </View>
@@ -195,146 +100,34 @@ const PracticeQs = () => {
             />
             <View style={styles.frameChild} />
           </View>
-          <Text style={styles.whatDoesThis}>What does this sign tell you?</Text>
+          <Text style={styles.whatDoesThis}>{q}</Text>
         </View>
-        <View style={styles.frame3}>
-          <View style={styles.frame4}>
-            <View style={styles.container}>
-              <DropDownPicker
-                style={styles.dropdownpicker}
-                open={frameDropdown1Open}
-                setOpen={setFrameDropdown1Open}
-                value={frameDropdown1Value}
-                setValue={setFrameDropdown1Value}
-                placeholder="All counties"
-                items={frameDropdown1Items}
-                labelStyle={styles.frameDropdown1Value}
-                textStyle={styles.frameDropdown1Text}
-                dropDownContainerStyle={styles.frameDropdown1dropDownContainer}
-              />
-            </View>
-            <View style={styles.frameView}>
-              <DropDownPicker
-                style={styles.dropdownpicker}
-                open={frameDropdown2Open}
-                setOpen={setFrameDropdown2Open}
-                value={frameDropdown2Value}
-                setValue={setFrameDropdown2Value}
-                placeholder="All counties"
-                items={frameDropdown2Items}
-                labelStyle={styles.frameDropdown2Value}
-                textStyle={styles.frameDropdown2Text}
-                dropDownContainerStyle={styles.frameDropdown2dropDownContainer}
-              />
-            </View>
-            <View style={styles.frameView}>
-              <DropDownPicker
-                style={styles.dropdownpicker}
-                open={frameDropdown3Open}
-                setOpen={setFrameDropdown3Open}
-                value={frameDropdown3Value}
-                setValue={setFrameDropdown3Value}
-                placeholder="All counties"
-                items={frameDropdown3Items}
-                labelStyle={styles.frameDropdown3Value}
-                textStyle={styles.frameDropdown3Text}
-                dropDownContainerStyle={styles.frameDropdown3dropDownContainer}
-              />
-            </View>
-            <View style={styles.wrapper2}>
-              <DropDownPicker
-                style={styles.dropdownpicker}
-                open={frameDropdown4Open}
-                setOpen={setFrameDropdown4Open}
-                value={frameDropdown4Value}
-                setValue={setFrameDropdown4Value}
-                placeholder="All counties"
-                items={frameDropdown4Items}
-                labelStyle={styles.frameDropdown4Value}
-                textStyle={styles.frameDropdown4Text}
-                dropDownContainerStyle={styles.frameDropdown4dropDownContainer}
-              />
-            </View>
-          </View>
+          <Text style={!select ? styles.question : styles.selected} onPress={() => [setSelect(a1), console.log(select)]} >A: {a1}</Text>
+          <Text style={styles.question} onPress={() => [setSelect(a2), console.log(select)]}>B: {a2}</Text>
+          <Text style={styles.question} onPress={() => [setSelect(a3), console.log(select)]}>C: {a3}</Text>
+          <Text style={styles.question} onPress={() => [setSelect(a4), console.log(select)]}>D: {a4}</Text>
           <View style={styles.submitAnswerWrapper}>
-            <Text style={styles.submitAnswer}>Submit answer</Text>
+            {docRef ?
+            <Text onPress={() => [NextQ(), Marking()]} style={styles.submitAnswer}>Submit answer</Text>
+            :
+            <Text style={styles.submitAnswer}>Loading...</Text>
+             }
           </View>
         </View>
       </View>
-    </View>
   );
 };
+ {
+  return(
+  <><Text>Test</Text><Text>{cat1.length + cat2.length + cat3.length + cat4.length + cat5.length}/{count}</Text></>
+  )}
+  })()}
+</div>
+  )
+}
 
 const styles = StyleSheet.create({
-  frameDropdownValue: {
-    color: "#000",
-    fontSize: 20,
-    fontWeight: "600",
-    fontFamily: "Inter-SemiBold",
-  },
-  frameDropdowndropDownContainer: {
-    backgroundColor: "rgba(64, 64, 64, 0.07)",
-  },
-  frameDropdown1Value: {
-    color: "#000",
-    fontSize: 20,
-    fontWeight: "600",
-    fontFamily: "Inter-SemiBold",
-  },
-  frameDropdown1Text: {
-    color: "#000",
-    fontSize: 16,
-    fontWeight: "600",
-    fontFamily: "Inter-SemiBold",
-  },
-  frameDropdown1dropDownContainer: {
-    backgroundColor: "rgba(64, 64, 64, 0.07)",
-  },
-  frameDropdown2Value: {
-    color: "#000",
-    fontSize: 20,
-    fontWeight: "600",
-    fontFamily: "Inter-SemiBold",
-  },
-  frameDropdown2Text: {
-    color: "#000",
-    fontSize: 16,
-    fontWeight: "600",
-    fontFamily: "Inter-SemiBold",
-  },
-  frameDropdown2dropDownContainer: {
-    backgroundColor: "rgba(64, 64, 64, 0.07)",
-  },
-  frameDropdown3Value: {
-    color: "#000",
-    fontSize: 20,
-    fontWeight: "600",
-    fontFamily: "Inter-SemiBold",
-  },
-  frameDropdown3Text: {
-    color: "#000",
-    fontSize: 16,
-    fontWeight: "600",
-    fontFamily: "Inter-SemiBold",
-  },
-  frameDropdown3dropDownContainer: {
-    backgroundColor: "rgba(64, 64, 64, 0.07)",
-  },
-  frameDropdown4Value: {
-    color: "#000",
-    fontSize: 20,
-    fontWeight: "600",
-    fontFamily: "Inter-SemiBold",
-  },
-  frameDropdown4Text: {
-    color: "#000",
-    fontSize: 16,
-    fontWeight: "600",
-    fontFamily: "Inter-SemiBold",
-  },
-  frameDropdown4dropDownContainer: {
-    backgroundColor: "rgba(64, 64, 64, 0.07)",
-  },
+  
   drivingTest: {
     position: "relative",
     fontSize: FontSize.size_21xl,
@@ -347,7 +140,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     width: 246,
-    height: 34,
   },
   iconHamburgerMenu: {
     position: "relative",
@@ -365,7 +157,6 @@ const styles = StyleSheet.create({
     justifyContent: "flex-end",
     paddingHorizontal: 24,
     paddingTop: Padding.p_13xl,
-    paddingBottom: Padding.p_14xl,
   },
   dropdownpicker: {
     backgroundColor: Color.colorDarkslategray_200,
@@ -373,21 +164,18 @@ const styles = StyleSheet.create({
   wrapper: {
     borderRadius: Border.br_3xs,
     width: 259,
-    height: 49,
     flexDirection: "column",
     alignItems: "flex-start",
     justifyContent: "center",
     paddingHorizontal: 19,
     paddingVertical: 0,
     marginLeft: 14,
-    marginTop: 27,
   },
   frame: {
     position: "absolute",
     top: 0,
     left: 0,
     width: 393,
-    height: 175,
     overflow: "hidden",
     flexDirection: "column",
     alignItems: "center",
@@ -404,8 +192,6 @@ const styles = StyleSheet.create({
     borderRadius: Border.br_3xs,
     backgroundColor: Color.colorDarkslategray_200,
     width: 342,
-    height: 205,
-    marginTop: -205,
   },
   image19Parent: {
     width: 342,
@@ -425,14 +211,11 @@ const styles = StyleSheet.create({
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
-    width: 285,
-    height: 23,
-    marginRight: 114,
-    marginTop: 27,
+    marginLeft: "5%",
+    marginRight: "5%",
   },
   frame2: {
     width: 399,
-    height: 256,
     overflow: "hidden",
     flexDirection: "column",
     alignItems: "center",
@@ -441,7 +224,6 @@ const styles = StyleSheet.create({
   container: {
     borderRadius: Border.br_3xs,
     width: 342,
-    height: 34,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "flex-start",
@@ -452,30 +234,27 @@ const styles = StyleSheet.create({
   frameView: {
     borderRadius: Border.br_3xs,
     width: 342,
-    height: 34,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "flex-start",
     paddingHorizontal: Padding.p_2xs,
     paddingVertical: Padding.p_6xs,
     marginLeft: 1,
-    marginTop: 11,
+
   },
   wrapper2: {
     borderRadius: Border.br_3xs,
     width: 342,
-    height: 34,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "flex-start",
     paddingHorizontal: Padding.p_xs,
     paddingVertical: Padding.p_6xs,
     marginLeft: 1,
-    marginTop: 11,
+
   },
   frame4: {
     width: 343,
-    height: 169,
     overflow: "hidden",
     flexDirection: "column",
     alignItems: "center",
@@ -487,13 +266,16 @@ const styles = StyleSheet.create({
     letterSpacing: 0,
     fontWeight: "600",
     fontFamily: FontFamily.interSemiBold,
-    color: Color.colorWhite,
     textAlign: "center",
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
-    width: 120,
-    height: 23,
+    padding: "5%",
+    border:  " 0.5px solid #3B3B3B",
+    borderRadius: "5px",
+    backgroundColor: "#FF7F7F",
+    width: "50%"
+
   },
   submitAnswerWrapper: {
     borderRadius: Border.br_94xl,
@@ -506,23 +288,19 @@ const styles = StyleSheet.create({
     paddingHorizontal: 0,
     paddingVertical: 14,
     marginLeft: 2,
-    marginTop: 27,
   },
   frame3: {
     width: 343,
-    height: 246,
     overflow: "hidden",
     flexDirection: "column",
     alignItems: "center",
     justifyContent: "flex-start",
-    marginTop: 18,
   },
   frame1: {
     position: "absolute",
     top: 220,
     left: -3,
     width: 399,
-    height: 520,
     overflow: "hidden",
     flexDirection: "column",
     alignItems: "center",
@@ -531,11 +309,25 @@ const styles = StyleSheet.create({
   practiceQs: {
     position: "relative",
     backgroundColor: Color.colorWhite,
-    flex: 1,
     width: "100%",
-    height: 852,
-    overflow: "hidden",
+    height: 900,
   },
+  question: {
+    margin: "1%",
+    padding: "2%",
+    border:  " 0.5px solid #C5C5C5",
+    borderRadius: "5px",
+    width: "90%",
+    backgroundColor: "#40404050"
+  },
+  selected: {
+    margin: "1%",
+    padding: "2%",
+    border:  " 0.5px solid #3B3B3B",
+    borderRadius: "5px",
+    width: "90%",
+    backgroundColor: "#FF7F7F"
+  }
 });
 
 export default PracticeQs;
