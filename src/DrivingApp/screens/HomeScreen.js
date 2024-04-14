@@ -17,6 +17,12 @@ const HomeScreen = () => {
       .catch(error => alert(error.message))
   }
 
+  useEffect(() => {
+    if (!auth.currentUser) {
+      navigation.replace("Login")
+    }
+}, [])
+
 
   return (
     <ScrollView style={styles.home}>

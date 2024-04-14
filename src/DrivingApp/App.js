@@ -13,6 +13,8 @@ import PracticeQs from './screens/PracticeQs';
 import SidePanel from './screens/SidePanel';
 
 const Stack = createNativeStackNavigator();
+const categories = ["Control of Vehicle", "Managing Risk", "Rules of the Road", "Safe and Responsible Driving", "Technical Matters"]
+
 
 export default function App() {
   return (
@@ -25,7 +27,8 @@ export default function App() {
         <Stack.Screen name="DrivingTest" component={DrivingTest} />
         <Stack.Screen name="FindInstructors" component={FindInstuctors} />
         <Stack.Screen name="TestCentre" component={TestCentre1} />
-        <Stack.Screen name="Practice" component={PracticeQs} />
+        <Stack.Screen name="Practice" component={PracticeQs} initialParams = {{"categories" : categories}} />
+        <Stack.Screen name="Practice" component={PracticeQs} initialParams = {{"categories" : categories}} />
         <Stack.Screen name="SidePanel" component={SidePanel} />
       </Stack.Navigator>
     </NavigationContainer>
