@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import {
   ScrollView,
   Text,
@@ -12,10 +12,98 @@ import PopUp from "../components/PopUp";
 import { useNavigation } from "@react-navigation/native";
 import TitleBar from "../components/TitleBar";
 import { Padding, FontSize, FontFamily, Color, Border } from "../GlobalStyles";
+import { doc, getDoc, setDoc, collection } from "firebase/firestore";
+import { auth, db } from '../firebaseConfig'
+import Results from "./Results";
 
-const PracticeQs = () => {
+const PracticeQs = (props) => {
   const [butttonVisible, setButttonVisible] = useState(false);
-  const navigation = useNavigation();
+  const [num, setNum] = useState("1")
+  const [docState, setDocState] = useState()
+  const [img, setImg] = useState()
+  const [q, setQ] = useState()
+  const [a1, setA1] = useState()
+  const [a2, setA2] = useState()
+  const [a3, setA3] = useState()
+  const [a4, setA4] = useState()
+  const [ans, setAns] = useState()
+  const [count, setCount] = useState(0)
+  const [cat, setCat] = useState(0)
+  const [select, setSelect] = useState()
+  const [cat1, setCat1] = useState([])
+  const [cat2, setCat2] = useState([])
+  const [cat3, setCat3] = useState([])
+  const [cat4, setCat4] = useState([])
+  const [cat5, setCat5] = useState([])
+  
+  let categories = props.route.params.categories
+  const limit = 1
+  
+  function NextQ(){
+    setCount(count + 1)
+    if(cat == (categories.length - 1)){
+      setCat(0)
+    }
+    else if(Number(num) == limit){
+      setNum("1")
+      setCat(cat + 1)
+    }
+    else if(Number(num) < limit){
+      setNum((Number(num) + 1).toString())
+    }
+    if(ans == select){
+      switch (cat) {
+        case 0:
+          setCat1(cat1.concat(num))
+          break;
+        case 1:
+          setCat2(cat2.concat(num))
+          break;
+        case 2:
+          setCat3(cat3.concat(num))
+          break;
+        case 3:
+          setCat4(cat4.concat(num))
+          break;
+        case 4:
+          setCat5(cat5.concat(num))
+          break;
+      }
+    }
+  }
+
+  // useEffect(() => {
+  //   async function fetchDoc(){
+  //     let docSnap = await getDoc(docRef)
+  //     setDocState(docSnap.data())
+  //   }
+  //   fetchDoc()
+  // }, [])
+
+  useEffect(() => {
+    const fetchDoc = async () => {
+      try {
+        const docSnapshot = await getDoc(docRef);
+        if (docSnapshot.exists()) {
+          const data = docSnapshot.data();
+          setA1(data.A1);
+          setA2(data.A2);
+          setA3(data.A3);
+          setA4(data.A4);
+          setAns(data.AA);
+          setQ(data.Q);
+          setImg(data.i)
+        }
+      } catch (error) {
+        console.error("Error fetching document:", error);
+      }
+    };
+  
+    fetchDoc();
+  }, [cat, num]);
+
+  const docRef = doc(db, categories[cat], num);
+
 
   const openButtton = useCallback(() => {
     setButttonVisible(true);
@@ -27,86 +115,91 @@ const PracticeQs = () => {
 
   return (
     <>
-      <View style={styles.practiceQs}>
-        <TitleBar
-          home="Quit"
-          hamburgerOnOffFlex={1}
-          onButttonPress={openButtton}
-          onHamburgerOnOffPress={() => navigation.toggleDrawer()}
-        />
-        <ScrollView
-          style={styles.main}
-          showsVerticalScrollIndicator={true}
-          showsHorizontalScrollIndicator={false}
-          contentContainerStyle={styles.mainScrollViewContent}
-        >
-          <View style={[styles.category, styles.mainImgSpaceBlock]}>
-            <View style={styles.categoryName}>
-              <Text style={[styles.roadAndTraffic, styles.answerTypo]}>
-                Road and traffic signs
-              </Text>
-            </View>
-          </View>
-          <View style={[styles.mainImg, styles.mainImgFlexBox]}>
-            <Image
-              style={styles.qImgPlaceholderIcon}
-              contentFit="cover"
-              source={require("../assets/q-img-placeholder.png")}
+    {(() => {
+      if (count < (categories.length)) {
+        return (
+          <View style={styles.practiceQs}>
+            <TitleBar
+              home="Quit"
+              hamburgerOnOffFlex={1}
+              onButttonPress={openButtton}
+              onHamburgerOnOffPress={() => navigation.toggleDrawer()}
             />
-          </View>
-          <View style={[styles.answerSelection, styles.mainImgFlexBox]}>
-            <View style={[styles.question, styles.aSpaceBlock]}>
-              <Text style={styles.whatDoesThis}>
-                What does this sign tell you?
-              </Text>
-            </View>
-            <View style={styles.allans}>
-              <View style={[styles.a, styles.aSpaceBlock]}>
-                <Pressable style={[styles.aParent, styles.parentFlexBox]}>
-                  <Text style={[styles.a1, styles.answerTypo]}>A</Text>
-                  <Text style={[styles.answer, styles.answerTypo]}>Answer</Text>
-                </Pressable>
-              </View>
-              <View style={[styles.b, styles.aSpaceBlock]}>
-                <Pressable style={[styles.bParent, styles.parentFlexBox]}>
-                  <Text style={[styles.a1, styles.answerTypo]}>B</Text>
-                  <Text style={[styles.answer1, styles.answerTypo]}>
-                    Answer
-                  </Text>
-                </Pressable>
-              </View>
-              <View style={[styles.b, styles.aSpaceBlock]}>
-                <Pressable style={[styles.bParent, styles.parentFlexBox]}>
-                  <Text style={[styles.a1, styles.answerTypo]}>C</Text>
-                  <Text style={[styles.answer2, styles.answerTypo]}>
-                    Answer
-                  </Text>
-                </Pressable>
-              </View>
-              <View style={[styles.b, styles.aSpaceBlock]}>
-                <View style={[styles.dParent, styles.parentFlexBox]}>
-                  <Text style={[styles.a1, styles.answerTypo]}>D</Text>
-                  <Text style={[styles.answer3, styles.answerTypo]}>
-                    Answer
+            <ScrollView
+              style={styles.main}
+              showsVerticalScrollIndicator={true}
+              showsHorizontalScrollIndicator={false}
+              contentContainerStyle={styles.mainScrollViewContent}
+            >
+              <View style={[styles.category, styles.mainImgSpaceBlock]}>
+                <View style={styles.categoryName}>
+                  <Text style={[styles.roadAndTraffic, styles.answerTypo]}>
+                    {categories[cat]}
                   </Text>
                 </View>
               </View>
-            </View>
-          </View>
-          <View style={[styles.buttonParent, styles.aSpaceBlock]}>
-            <Pressable style={styles.button}>
-              <View style={[styles.answer4, styles.answer4FlexBox]}>
-                <Text style={[styles.answer5, styles.nextTypo]}>Answer</Text>
+              <View style={[styles.mainImg, styles.mainImgFlexBox]}>
+                <Image
+                  style={styles.qImgPlaceholderIcon}
+                  contentFit="cover"
+                  source={img ? img : require("../assets/image-20240207-002627370-2.png")}
+                />
               </View>
-            </Pressable>
-            <View style={styles.button1}>
-              <Pressable style={[styles.nextButton, styles.answer4FlexBox]}>
-                <Text style={[styles.next, styles.nextTypo]}>Next</Text>
-              </Pressable>
-            </View>
+              <View style={[styles.answerSelection, styles.mainImgFlexBox]}>
+                <View style={[styles.question, styles.aSpaceBlock]}>
+                  <Text style={styles.whatDoesThis}>
+                    {q}
+                  </Text>
+                </View>
+                <View style={styles.allans}>
+                  <View style={[styles.a, styles.aSpaceBlock]}>
+                    <Pressable onPress={() => setSelect(a1)} style={[styles.aParent, styles.parentFlexBox]}>
+                      <Text style={[styles.a1, styles.answerTypo]}>A</Text>
+                      <Text style={[styles.answer, styles.answerTypo]}>{a1}</Text>
+                    </Pressable>
+                  </View>
+                  <View style={[styles.b, styles.aSpaceBlock]}>
+                    <Pressable onPress={() => setSelect(a2)} style={[styles.bParent, styles.parentFlexBox]}>
+                      <Text style={[styles.a1, styles.answerTypo]}>B</Text>
+                      <Text style={[styles.answer1, styles.answerTypo]}>
+                        {a2}
+                      </Text>
+                    </Pressable>
+                  </View>
+                  <View style={[styles.b, styles.aSpaceBlock]}>
+                    <Pressable onPress={() => setSelect(a3)} style={[styles.bParent, styles.parentFlexBox]}>
+                      <Text style={[styles.a1, styles.answerTypo]}>C</Text>
+                      <Text style={[styles.answer2, styles.answerTypo]}>
+                        {a3}
+                      </Text>
+                    </Pressable>
+                  </View>
+                  <View style={[styles.b, styles.aSpaceBlock]}>
+                    <Pressable onPress={() => setSelect(a4)} style={[styles.dParent, styles.parentFlexBox]}>
+                      <Text style={[styles.a1, styles.answerTypo]}>D</Text>
+                      <Text style={[styles.answer3, styles.answerTypo]}>
+                        {a4}
+                      </Text>
+                    </Pressable>
+                  </View>
+                </View>
+              </View>
+              <View style={[styles.buttonParent, styles.aSpaceBlock]}>
+                <View style={styles.button1}>
+                  <Pressable onPress={() => NextQ()} style={[styles.nextButton, styles.answer4FlexBox]}>
+                    <Text style={[styles.next, styles.nextTypo]}>Next</Text>
+                  </Pressable>
+                </View>
+              </View>
+            </ScrollView>
           </View>
-        </ScrollView>
-      </View>
+        );
+      } else {
+        return (
+          <Results score = {cat1.length + cat2.length + cat3.length + cat4.length + cat5.length} count = {count} countSet = {setCount}/>
+        );
+      }
+    })()}
 
       <Modal animationType="fade" transparent visible={butttonVisible}>
         <View style={styles.butttonOverlay}>

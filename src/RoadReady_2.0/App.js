@@ -89,6 +89,10 @@ const Drawer = createDrawerNavigator();
 
 const Tab = createBottomTabNavigator();
 
+const categories = ["Control of Vehicle", "Managing Risk", "Rules of the Road", "Safe and Responsible Driving", "Technical Matters"]
+const signs = ["Junction", "Hazards", "Roundabout"]
+
+
 function DrawerRoot({ navigation }) {
   return (
     <Drawer.Navigator
@@ -125,6 +129,13 @@ function DrawerRoot({ navigation }) {
         name="PracticeQs"
         component={PracticeQs}
         options={{ headerShown: false }}
+        initialParams = {{"categories" : categories}}
+      />
+      <Drawer.Screen
+        name="SignQs"
+        component={PracticeQs}
+        options={{ headerShown: false }}
+        initialParams = {{"categories" : signs}}
       />
     </Drawer.Navigator>
   );
@@ -266,6 +277,13 @@ const App = () => {
               name="PracticeQs"
               component={PracticeQs}
               options={{ headerShown: false }}
+              initialParams = {{"categories" : categories}}
+            />
+            <Stack.Screen
+              name="SignQs"
+              component={PracticeQs}
+              options={{ headerShown: false }}
+              initialParams = {{"categories" : signs}}
             />
             <Stack.Screen
               name="Test"

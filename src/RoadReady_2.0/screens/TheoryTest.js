@@ -83,10 +83,24 @@ const TheoryTest = () => {
                 </Text>
               </View>
             </TouchableOpacity>
-            <RoadTraffic
-              image202402070026273702={require("../assets/image-20240207-002627370-2.png")}
-              roadTrafficSigns={`Road & Traffic Signs`}
-            />
+            <TouchableOpacity
+              style={[styles.practiceqtile, styles.practiceqtileFlexBox]}
+              activeOpacity={0.2}
+              onPress={() => navigation.navigate("SignQs")}
+            >
+              <View style={styles.innerpractice}>
+                <Image
+                  style={styles.image15Icon}
+                  contentFit="cover"
+                  source={require("../assets/image-20240207-002627370-2.png")}
+                />
+                <Text
+                  style={[styles.practiceQuestions, styles.testHistoryTypo]}
+                >
+                  Road Sign Questions
+                </Text>
+              </View>
+            </TouchableOpacity>
           </View>
           <View
             style={[
