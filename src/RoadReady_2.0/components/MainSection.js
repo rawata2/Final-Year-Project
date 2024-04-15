@@ -45,7 +45,7 @@ const MainSection = (props) => {
           <Pressable
             style={[styles.signOut, styles.answerFlexBox]}
             activeOpacity={0.2}
-            onPress={() => navigation.navigate("TheoryTest")}
+            onPress={() => props.reset()}
           >
             <Text style={[styles.startNewTest, styles.startNewTestTypo]}>
               Start New Test

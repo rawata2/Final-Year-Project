@@ -12,14 +12,13 @@ import PopUp from "../components/PopUp";
 import { useNavigation } from "@react-navigation/native";
 import TitleBar from "../components/TitleBar";
 import { Padding, FontSize, FontFamily, Color, Border } from "../GlobalStyles";
-import { doc, getDoc, setDoc, collection } from "firebase/firestore";
+import { doc, getDoc, setDoc, collection, addDoc, getCountFromServer, getDocs } from "firebase/firestore";
 import { auth, db } from '../firebaseConfig'
 import Results from "./Results";
 
 const PracticeQs = (props) => {
   const [butttonVisible, setButttonVisible] = useState(false);
   const [num, setNum] = useState("1")
-  const [docState, setDocState] = useState()
   const [img, setImg] = useState()
   const [q, setQ] = useState()
   const [a1, setA1] = useState()
@@ -35,12 +34,44 @@ const PracticeQs = (props) => {
   const [cat3, setCat3] = useState([])
   const [cat4, setCat4] = useState([])
   const [cat5, setCat5] = useState([])
+  const [docs, setDocs] = useState()
   
   let categories = props.route.params.categories
   const limit = 1
+  const coll = collection(db, "Quiz",auth.currentUser.email, "attempts")
+
+  const resetQuiz = () => {
+    setNum("1")
+    setCount(0)
+    setCat(0)
+    setSelect(null)
+    setCat1([])
+    setCat2([])
+    setCat3([])
+    setCat4([])
+    setCat5([])
+    setDocs(null)
+  }
   
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const snapshot = await getDocs(coll);
+        const numDocs = snapshot.size;
+        console.log("Number of documents:", numDocs);
+        setDocs(numDocs + 1)
+        // Handle the snapshot data as needed
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchData();
+  }, [coll]);
+
   function NextQ(){
     setCount(count + 1)
+    setSelect(null)
     if(cat == (categories.length - 1)){
       setCat(0)
     }
@@ -72,13 +103,23 @@ const PracticeQs = (props) => {
     }
   }
 
-  // useEffect(() => {
-  //   async function fetchDoc(){
-  //     let docSnap = await getDoc(docRef)
-  //     setDocState(docSnap.data())
-  //   }
-  //   fetchDoc()
-  // }, [])
+  // function Marking(){
+  //   if(count >= (categories.length - 1)){() => {
+  //     const score = cat1.length + cat2.length + cat3.length + cat4.length + cat5.length
+  //     setDoc(doc(db, "Quiz", auth.currentUser.email, "attempts", String(docs)),{result: ((score) > (count / 1.33) ? "Pass": "Fail"), score: (String(count + 1) + "/" + String(score))})
+  //   }}
+  // }
+
+  useEffect(() => {
+    console.log(count >= (categories.length))
+    if(count >= (categories.length)) {
+      const score = cat1.length + cat2.length + cat3.length + cat4.length + cat5.length
+      console.log(score)
+      setDoc(doc(db, "Quiz", auth.currentUser.email, "attempts", String(docs)),{result: ((score) > (count / 1.33) ? "Pass": "Fail"), score: (String(score) + "/" + (String(count)))})
+    }
+  }, [count])
+
+  console.log(select)
 
   useEffect(() => {
     const fetchDoc = async () => {
@@ -153,13 +194,13 @@ const PracticeQs = (props) => {
                 </View>
                 <View style={styles.allans}>
                   <View style={[styles.a, styles.aSpaceBlock]}>
-                    <Pressable onPress={() => setSelect(a1)} style={[styles.aParent, styles.parentFlexBox]}>
+                    <Pressable onPress={() => setSelect(a1)} style={(select == a1) ? [styles.aParent, styles.parentFlexBoxSelect] : [styles.aParent, styles.parentFlexBox]}>
                       <Text style={[styles.a1, styles.answerTypo]}>A</Text>
                       <Text style={[styles.answer, styles.answerTypo]}>{a1}</Text>
                     </Pressable>
                   </View>
                   <View style={[styles.b, styles.aSpaceBlock]}>
-                    <Pressable onPress={() => setSelect(a2)} style={[styles.bParent, styles.parentFlexBox]}>
+                    <Pressable onPress={() => setSelect(a2)} style={(select == a2) ? [styles.bParent, styles.parentFlexBoxSelect] :[styles.bParent, styles.parentFlexBox]}>
                       <Text style={[styles.a1, styles.answerTypo]}>B</Text>
                       <Text style={[styles.answer1, styles.answerTypo]}>
                         {a2}
@@ -167,7 +208,7 @@ const PracticeQs = (props) => {
                     </Pressable>
                   </View>
                   <View style={[styles.b, styles.aSpaceBlock]}>
-                    <Pressable onPress={() => setSelect(a3)} style={[styles.bParent, styles.parentFlexBox]}>
+                    <Pressable onPress={() => setSelect(a3)} style={(select == a3) ? [styles.bParent, styles.parentFlexBoxSelect] : [styles.bParent, styles.parentFlexBox]}>
                       <Text style={[styles.a1, styles.answerTypo]}>C</Text>
                       <Text style={[styles.answer2, styles.answerTypo]}>
                         {a3}
@@ -175,7 +216,7 @@ const PracticeQs = (props) => {
                     </Pressable>
                   </View>
                   <View style={[styles.b, styles.aSpaceBlock]}>
-                    <Pressable onPress={() => setSelect(a4)} style={[styles.dParent, styles.parentFlexBox]}>
+                    <Pressable onPress={() => setSelect(a4)} style={(select == a4) ? [styles.dParent, styles.parentFlexBoxSelect] : [styles.dParent, styles.parentFlexBox]}>
                       <Text style={[styles.a1, styles.answerTypo]}>D</Text>
                       <Text style={[styles.answer3, styles.answerTypo]}>
                         {a4}
@@ -186,7 +227,7 @@ const PracticeQs = (props) => {
               </View>
               <View style={[styles.buttonParent, styles.aSpaceBlock]}>
                 <View style={styles.button1}>
-                  <Pressable onPress={() => NextQ()} style={[styles.nextButton, styles.answer4FlexBox]}>
+                  <Pressable onPress={() => [ NextQ()]} style={[styles.nextButton, styles.answer4FlexBox]}>
                     <Text style={[styles.next, styles.nextTypo]}>Next</Text>
                   </Pressable>
                 </View>
@@ -196,7 +237,7 @@ const PracticeQs = (props) => {
         );
       } else {
         return (
-          <Results score = {cat1.length + cat2.length + cat3.length + cat4.length + cat5.length} count = {count} countSet = {setCount}/>
+          <Results score = {cat1.length + cat2.length + cat3.length + cat4.length + cat5.length} count = {count} reset = {resetQuiz}/>
         );
       }
     })()}
@@ -241,6 +282,13 @@ const styles = StyleSheet.create({
   parentFlexBox: {
     paddingVertical: Padding.p_mini,
     backgroundColor: Color.colorDarkslategray_200,
+    borderRadius: Border.br_3xs,
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  parentFlexBoxSelect: {
+    paddingVertical: Padding.p_mini,
+    backgroundColor: Color.red2,
     borderRadius: Border.br_3xs,
     flexDirection: "row",
     alignItems: "center",

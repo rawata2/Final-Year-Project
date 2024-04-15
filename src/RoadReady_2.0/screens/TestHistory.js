@@ -1,11 +1,32 @@
-import * as React from "react";
+import React, { useState, useEffect } from "react";
 import { Text, StyleSheet, View, ScrollView } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import TitleBar from "../components/TitleBar";
 import { Padding, Border, FontFamily, FontSize, Color } from "../GlobalStyles";
+import { doc, getDoc, setDoc, collection, addDoc, getCountFromServer, getDocs } from "firebase/firestore";
+import { auth, db } from '../firebaseConfig'
 
 const TestHistory = () => {
+  const [docs, setDocs] = useState()
   const navigation = useNavigation();
+  const coll = (collection(db, "Quiz",auth.currentUser.email, "attempts"))
+  
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const snapshot = await getDocs(coll);
+        const doclen = snapshot.docs.length
+        setDocs(snapshot.docs)
+        console.log("Number of documents:", snapshot.docs);
+        // Handle the snapshot data as needed
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchData();
+  }, [coll]);
+
 
   return (
     <View style={styles.testHistory}>
@@ -27,46 +48,20 @@ const TestHistory = () => {
         contentContainerStyle={styles.mainSectionScrollViewContent}
       >
         <Text style={styles.overview}>Overview</Text>
-        <View style={[styles.stats1, styles.statsSpaceBlock]}>
-          <View style={styles.allStats}>
-            <View style={styles.passAnalyFlexBox}>
-              <Text style={[styles.statusOfThe, styles.statusOfTheTypo]}>
-                Status of the test
-              </Text>
-              <Text style={[styles.numberOfCorrect, styles.statusOfTheTypo]}>
-                Number of correct answers
-              </Text>
-              <Text style={[styles.numberOfCorrect, styles.statusOfTheTypo]}>
-                Total Learning Time
-              </Text>
-            </View>
-            <View style={styles.passAnalyFlexBox}>
-              <Text style={[styles.passed, styles.textTypo]}>PASSED</Text>
-              <Text style={[styles.text, styles.textTypo]}>39/40</Text>
-              <Text style={[styles.text, styles.textTypo]}>27 min</Text>
+        {docs && docs.map((doc, index) => (
+          <View key={index} style={(doc.data().result == "Pass") ? [styles.stats1, styles.statsSpaceBlock]: [styles.stats2, styles.statsSpaceBlock] }>
+            <View style={styles.allStats}>
+              <View style={styles.passAnalyFlexBox}>
+                <Text style={[styles.statusOfThe, styles.statusOfTheTypo]}>
+                  Status of the test: {doc.data().result}
+                </Text>
+                <Text style={[styles.numberOfCorrect, styles.statusOfTheTypo]}>
+                  Number of correct answers: {doc.data().score}
+                </Text>
+              </View>
             </View>
           </View>
-        </View>
-        <View style={[styles.stats2, styles.statsSpaceBlock]}>
-          <View style={styles.allStats}>
-            <View style={styles.passAnalyFlexBox}>
-              <Text style={[styles.statusOfThe, styles.statusOfTheTypo]}>
-                Status of the test
-              </Text>
-              <Text style={[styles.numberOfCorrect, styles.statusOfTheTypo]}>
-                Number of correct answers
-              </Text>
-              <Text style={[styles.numberOfCorrect, styles.statusOfTheTypo]}>
-                Total Learning Time
-              </Text>
-            </View>
-            <View style={styles.passAnalyFlexBox}>
-              <Text style={[styles.failed, styles.textTypo]}>FAILED</Text>
-              <Text style={[styles.text, styles.textTypo]}>35/40</Text>
-              <Text style={[styles.text, styles.textTypo]}>25 min</Text>
-            </View>
-          </View>
-        </View>
+        ))}
       </ScrollView>
     </View>
   );
