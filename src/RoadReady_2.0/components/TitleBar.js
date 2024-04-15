@@ -8,8 +8,11 @@ import {
 } from "react-native";
 import { Image } from "expo-image";
 import { FontSize, FontFamily, Color, Padding, Border } from "../GlobalStyles";
+import { useNavigation } from "@react-navigation/native";
 
 const getStyleValue = (key, value) => {
+  const navigation = useNavigation();
+
   if (value === undefined) return;
   return { [key]: value === "unset" ? undefined : value };
 };

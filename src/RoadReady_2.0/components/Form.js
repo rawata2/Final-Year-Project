@@ -1,11 +1,46 @@
-import * as React from "react";
+import React, {useState, useEffect} from 'react'
 import { Text, StyleSheet, TextInput, View, Pressable } from "react-native";
 import { Image } from "expo-image";
 import { useNavigation } from "@react-navigation/native";
 import { Padding, Color, Border, FontSize, FontFamily } from "../GlobalStyles";
+import { auth, db } from '../firebaseConfig'
+import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth"
+import { doc, getDoc, setDoc, collection } from "firebase/firestore";
 
 const Form = () => {
+  const [username, setUsername] = useState('')
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [docState, setDocState] = useState()
+
   const navigation = useNavigation();
+
+  useEffect(() => {
+    const unsubscribe = auth.onAuthStateChanged(user => {
+      if (user) {
+        navigation.navigate("HomePage")
+      }
+    })
+
+    return unsubscribe
+  }, [])
+
+
+  const handleSignUp = () => {
+    createUserWithEmailAndPassword(auth, email, password)
+    .then(userCredentials => {
+      const user = userCredentials.user;
+      setDoc(doc(db, "user", email), {
+        email: email, name: username
+      });
+      console.log('Registered with:', user.email);
+      console.log(userCredentials)
+      updateProfile(user, {
+        displayName: username
+      })
+    })
+    .catch(error => alert(error.message))
+}
 
   return (
     <View style={styles.form}>
@@ -20,6 +55,7 @@ const Form = () => {
           style={styles.fullName}
           placeholder="Full Name"
           placeholderTextColor="rgba(0, 0, 0, 0.3)"
+          onChangeText={text => setUsername(text)}
         />
       </View>
       <View style={[styles.name, styles.nameBorder]}>
@@ -34,6 +70,7 @@ const Form = () => {
           style={styles.fullName}
           placeholder="Email"
           placeholderTextColor="rgba(0, 0, 0, 0.3)"
+          onChangeText={text => setEmail(text)}
         />
       </View>
       <View style={[styles.name, styles.nameBorder]}>
@@ -49,25 +86,7 @@ const Form = () => {
           placeholder="Password"
           secureTextEntry={true}
           placeholderTextColor="rgba(0, 0, 0, 0.3)"
-        />
-        <Image
-          style={styles.eyeIcon}
-          contentFit="cover"
-          source={require("../assets/eye-icon.png")}
-        />
-      </View>
-      <View style={[styles.confirmPassword, styles.iconFlexBox]}>
-        <View style={[styles.passwordIcon, styles.iconFlexBox]}>
-          <Image
-            style={styles.vectorIcon1}
-            contentFit="cover"
-            source={require("../assets/vector1.png")}
-          />
-        </View>
-        <TextInput
-          style={styles.fullName}
-          placeholder="Confirm Password"
-          placeholderTextColor="rgba(0, 0, 0, 0.3)"
+          onChangeText={text => setPassword(text)}
         />
         <Image
           style={styles.eyeIcon}
@@ -77,13 +96,11 @@ const Form = () => {
       </View>
       <Pressable
         style={[styles.signup, styles.signupSpaceBlock]}
-        onPress={() => navigation.navigate("SignIn")}
+        onPress={() => handleSignUp() }
       >
         <Pressable
           style={[styles.signUpButton, styles.passwordIconFlexBox]}
-          onPress={() =>
-            navigation.navigate("DrawerRoot", { screen: "BottomTabsRoot" })
-          }
+          onPress={() => handleSignUp() }
         >
           <Text style={styles.signUp1}>Sign Up</Text>
         </Pressable>
