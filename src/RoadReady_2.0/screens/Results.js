@@ -5,7 +5,7 @@ import TitleBar from "../components/TitleBar";
 import MainSection from "../components/MainSection";
 import { Color } from "../GlobalStyles";
 
-const Results = () => {
+const Results = (props) => {
   const navigation = useNavigation();
 
   return (
@@ -15,7 +15,7 @@ const Results = () => {
         onButttonPress={() => navigation.goBack()}
         onHamburgerOnOffPress={() => navigation.toggleDrawer()}
       />
-      <MainSection />
+      <MainSection score = {props.score} count = {props.count} countset = {props.setCount}/>
     </View>
   );
 };

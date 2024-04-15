@@ -11,7 +11,7 @@ import { Image } from "expo-image";
 import { useNavigation } from "@react-navigation/native";
 import { Color, Padding, Border, FontFamily, FontSize } from "../GlobalStyles";
 
-const MainSection = () => {
+const MainSection = (props) => {
   const navigation = useNavigation();
 
   return (
@@ -22,16 +22,16 @@ const MainSection = () => {
       contentContainerStyle={styles.mainSectionScrollViewContent}
     >
       <View style={[styles.framePassFail, styles.buttonsSpaceBlock]}>
-        <Text style={styles.congratulations}>Congratulations!</Text>
+        <Text style={styles.congratulations}>{(props.score > (props.count / 1.33)) ? "Congratulations" : "Better luck Next Time"}</Text>
         <Image
           style={styles.framePassFailChild}
           contentFit="cover"
           source={require("../assets/ellipse-11.png")}
         />
-        <Text style={styles.drivingTestPassed}>driving Test Passed</Text>
+        <Text style={styles.drivingTestPassed}>{(props.score > (props.count / 1.33)) ? "driving Test Passed" : "driving Test Failed"}</Text>
         <View style={styles.stat}>
           <View style={styles.resultsFlexBox}>
-            <Text style={styles.text}>37/40</Text>
+            <Text style={styles.text}>{props.score}/{props.count}</Text>
             <Text style={[styles.results1, styles.time1FlexBox]}>Results</Text>
           </View>
           <View style={styles.resultsFlexBox}>
@@ -42,17 +42,17 @@ const MainSection = () => {
       </View>
       <View style={[styles.buttons, styles.resultsFlexBox]}>
         <View style={styles.newTest}>
-          <TouchableOpacity
+          <Pressable
             style={[styles.signOut, styles.answerFlexBox]}
             activeOpacity={0.2}
-            onPress={() => navigation.navigate("SignIn")}
+            onPress={() => navigation.navigate("TheoryTest")}
           >
             <Text style={[styles.startNewTest, styles.startNewTestTypo]}>
               Start New Test
             </Text>
-          </TouchableOpacity>
+          </Pressable>
         </View>
-        <Pressable style={styles.checkResults}>
+        <Pressable onPress={() => navigation.navigate("TestHistory")} style={styles.checkResults}>
           <View style={[styles.answer, styles.answerFlexBox]}>
             <Text style={[styles.checkResults1, styles.startNewTestTypo]}>
               Check Results
