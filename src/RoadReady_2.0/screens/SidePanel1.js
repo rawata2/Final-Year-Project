@@ -19,6 +19,7 @@ import {
 } from "react-native";
 import { Image } from "expo-image";
 import { FontSize, FontFamily, Padding, Color, Border } from "../GlobalStyles";
+import { auth, db } from '../firebaseConfig'
 
 const SidePanel1 = ({ state, navigation }) => {
   const [drawerItemsNormal] = useState([
@@ -39,6 +40,16 @@ const SidePanel1 = ({ state, navigation }) => {
   ]);
   const stateIndex = !state ? 0 : state.index - 1;
 
+  const handleSignOut = () => {
+    auth
+      .signOut()
+      .then(() => {
+        navigation.navigate("SignIn")
+      })
+      .catch(error => alert(error.message))
+  }
+
+  console.log(auth)
   return (
     <View style={styles.sidePanel}>
       <View style={styles.titlebar}>
@@ -75,7 +86,7 @@ const SidePanel1 = ({ state, navigation }) => {
           </View>
           <View style={styles.helloParent}>
             <Text style={styles.hello}>Hello</Text>
-            <Text style={[styles.user, styles.userTypo]}>User</Text>
+            <Text style={[styles.user, styles.userTypo]}>{auth.currentUser.displayName}</Text>
           </View>
         </View>
         <View style={styles.menuChild} />
@@ -89,15 +100,27 @@ const SidePanel1 = ({ state, navigation }) => {
         </View>
         <View style={[styles.allButtons, styles.allButtonsSpaceBlock]}>
           <View style={styles.allButtonsSpaceBlock}>
+             {auth ? (
             <TouchableOpacity
               style={styles.signOut}
               activeOpacity={0.2}
-              onPress={() => navigation.navigate("SignIn")}
+              onPress={() => handleSignOut()}
             >
               <Text style={[styles.signOut1, styles.profile1Typo]}>
                 Sign Out
               </Text>
             </TouchableOpacity>
+              ):
+              <TouchableOpacity
+              style={styles.signOut}
+              activeOpacity={0.2}
+              onPress={() => navigation.navigate('SignIn')}
+            >
+              <Text style={[styles.signOut1, styles.profile1Typo]}>
+                Sign In
+              </Text>
+            </TouchableOpacity>
+              }
           </View>
         </View>
       </View>

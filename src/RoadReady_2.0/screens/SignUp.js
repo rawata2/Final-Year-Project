@@ -1,12 +1,33 @@
-import * as React from "react";
+import React, {useState, useEffect} from 'react'
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import { Image } from "expo-image";
 import { useNavigation } from "@react-navigation/native";
 import Form from "../components/Form";
 import { FontSize, FontFamily, Color, Border, Padding } from "../GlobalStyles";
+import { writeUserData, data} from '../firebaseConfig'
+import { auth, db } from '../firebaseConfig'
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth"
+import { doc, getDoc, setDoc, collection } from "firebase/firestore";
+
 
 const SignUp = () => {
+  const [username, setUsername] = useState('')
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [docState, setDocState] = useState()
+
   const navigation = useNavigation();
+
+  useEffect(() => {
+    const unsubscribe = auth.onAuthStateChanged(user => {
+      if (user) {
+        navigation.navigate("HomePage")
+      }
+    })
+
+    return unsubscribe
+  }, [])
+
 
   return (
     <View style={[styles.signUp, styles.mainFlexBox]}>

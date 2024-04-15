@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, {useState, useEffect} from 'react'
 import {
   StyleSheet,
   View,
@@ -10,10 +10,46 @@ import {
 import { Image } from "expo-image";
 import { useNavigation } from "@react-navigation/native";
 import { Padding, Border, FontSize, FontFamily, Color } from "../GlobalStyles";
+import { auth } from '../firebaseConfig'
+import { signInWithEmailAndPassword } from "firebase/auth"
+
 
 const SignIn = () => {
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+
   const navigation = useNavigation();
 
+  
+  const handleLogin = () => {
+    signInWithEmailAndPassword(auth, email, password)
+    .then(userCredentials => {
+      const user = userCredentials.user;
+      console.log('Logged in with:', user.email);
+      navigation.navigate('HomePage')
+    })
+    .catch(error => alert(error.message))
+  }
+  
+  const handleSignOut = () => {
+    auth
+    .signOut()
+    .then(() => {
+      navigation.replace("SignIn")
+    })
+    .catch(error => alert(error.message))
+  }
+  
+  useEffect(() => {
+    const unsubscribe = auth.onAuthStateChanged(user => {
+      if (user) {
+        navigation.navigate('HomePage')
+      }
+    })
+
+    return unsubscribe
+  }, [])
+console.log(auth)
   return (
     <View style={[styles.signIn, styles.signInFlexBox]}>
       <View style={[styles.titlebar, styles.titlebarFlexBox]}>
@@ -37,6 +73,7 @@ const SignIn = () => {
               style={styles.emailOrUsername1}
               placeholder="Email or Username"
               placeholderTextColor="rgba(0, 0, 0, 0.3)"
+              onChangeText={(text) => setEmail(text)}
             />
           </View>
           <View style={[styles.emailOrUsername, styles.footerSpaceBlock]}>
@@ -52,6 +89,7 @@ const SignIn = () => {
               placeholder="Password"
               secureTextEntry={true}
               placeholderTextColor="rgba(0, 0, 0, 0.3)"
+              onChangeText={(text) => setPassword(text)}
             />
             <Image
               style={[styles.eyeIcon, styles.eyeIconLayout]}
@@ -61,21 +99,20 @@ const SignIn = () => {
           </View>
           <Pressable
             style={[styles.signIn2, styles.footerSpaceBlock]}
-            onPress={() => navigation.navigate("SignIn")}
+            onPress={() => handleLogin()}
           >
-            <TouchableOpacity
+            <Pressable
               style={[styles.signInButton, styles.signInButtonFlexBox]}
               activeOpacity={0.2}
-              onPress={() =>
-                navigation.navigate("DrawerRoot", { screen: "BottomTabsRoot" })
+              onPress={() => handleLogin()
               }
             >
               <Text style={[styles.signIn3, styles.signIn3Typo]}>Sign In</Text>
-            </TouchableOpacity>
+            </Pressable>
           </Pressable>
           <View style={[styles.footer, styles.footerSpaceBlock]}>
             <View style={[styles.forgotSignup, styles.formFlexBox]}>
-              <Text style={[styles.forgetPassword, styles.signIn3Typo]}>
+              <Text onPress={handleSignOut} style={[styles.forgetPassword, styles.signIn3Typo]}>
                 Forget Password?
               </Text>
               <View style={styles.dontHave}>

@@ -97,8 +97,33 @@ function DrawerRoot({ navigation }) {
     >
       <Drawer.Screen name="BottomTabsRoot" component={BottomTabsRoot} />
       <Drawer.Screen
+        name="HomePage"
+        component={HomePage}
+        options={{ headerShown: false }}
+      />
+      <Drawer.Screen
         name="RoutesPage"
         component={RoutesPage}
+        options={{ headerShown: false }}
+      />
+      <Drawer.Screen
+        name="FindInstructors"
+        component={FindInstructors}
+        options={{ headerShown: false }}
+      />
+      <Drawer.Screen
+        name="TheoryTest"
+        component={TheoryTest}
+        options={{ headerShown: false }}
+      />
+      <Drawer.Screen
+        name="DrivingTest"
+        component={DrivingTest}
+        options={{ headerShown: false }}
+      />
+      <Drawer.Screen
+        name="PracticeQs"
+        component={PracticeQs}
         options={{ headerShown: false }}
       />
     </Drawer.Navigator>
@@ -218,6 +243,11 @@ const App = () => {
             <Stack.Screen name="DrawerRoot" component={DrawerRoot} />
 
             <Stack.Screen
+              name="HomePage"
+              component={HomePage}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
               name="SignUp"
               component={SignUp}
               options={{ headerShown: false }}
@@ -250,6 +280,27 @@ const App = () => {
             <Stack.Screen
               name="TestHistory"
               component={TestHistory}
+              options={{ headerShown: false }}
+            />
+
+            <Stack.Screen
+              name="DrivingTest"
+              component={DrivingTest}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="TheoryTest"
+              component={TheoryTest}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="FindInstructors"
+              component={FindInstructors}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="ProfilePage"
+              component={ProfilePage}
               options={{ headerShown: false }}
             />
           </Stack.Navigator>

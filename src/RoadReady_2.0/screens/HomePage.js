@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, {useState, useEffect} from 'react'
 import {
   StyleSheet,
   View,
@@ -10,25 +10,27 @@ import {
 import { Image } from "expo-image";
 import { useNavigation } from "@react-navigation/native";
 import { Color, Border, FontFamily, FontSize, Padding } from "../GlobalStyles";
+import { auth, db} from '../firebaseConfig'
 
 const HomePage = () => {
   const navigation = useNavigation();
 
+  useEffect(() => {
+    const unsubscribe = auth.onAuthStateChanged(user => {
+      if (!user) {
+        navigation.navigate('SignIn')
+      }
+    })
+
+    return unsubscribe
+  }, [])
+
+
+
   return (
     <View style={[styles.homepage, styles.homepageLayout]}>
       <View style={[styles.titlebar, styles.titlebarFlexBox]}>
-        <View style={styles.backButton} />
-        <TouchableOpacity
-          style={[styles.hamburgerOnOff, styles.iconLayout1]}
-          activeOpacity={0.2}
-          onPress={() => navigation.toggleDrawer()}
-        >
-          <Image
-            style={styles.vectorIcon}
-            contentFit="cover"
-            source={require("../assets/vector32.png")}
-          />
-        </TouchableOpacity>
+      <Text style={styles.titlefont}>Welcome {auth.currentUser.displayName}</Text>
       </View>
       <ScrollView
         style={styles.main}
@@ -47,7 +49,7 @@ const HomePage = () => {
               style={styles.drivingiconFlexBox}
               activeOpacity={0.2}
               onPress={() =>
-                navigation.navigate("DrawerRoot", { screen: "BottomTabsRoot" })
+                navigation.navigate("DrawerRoot", { screen: "DrivingTest" })
               }
             >
               <View style={styles.image}>
@@ -65,7 +67,7 @@ const HomePage = () => {
               style={[styles.learnericon, styles.drivingiconFlexBox]}
               activeOpacity={0.2}
               onPress={() =>
-                navigation.navigate("DrawerRoot", { screen: "BottomTabsRoot" })
+                navigation.navigate("DrawerRoot", { screen: "TheoryTest" })
               }
             >
               <View style={styles.image}>
@@ -85,7 +87,7 @@ const HomePage = () => {
               style={styles.drivingiconFlexBox}
               activeOpacity={0.2}
               onPress={() =>
-                navigation.navigate("DrawerRoot", { screen: "BottomTabsRoot" })
+                navigation.navigate("DrawerRoot", { screen: "FindInstructors" })
               }
             >
               <View style={styles.image}>
@@ -252,6 +254,13 @@ const styles = StyleSheet.create({
     alignItems: "center",
     overflow: "hidden",
     flex: 1,
+  },
+  titlefont: {
+    lineHeight: 30,
+    fontWeight: "700",
+    fontFamily: FontFamily.subheadlineBold,
+    color: Color.colorDarkslategray_100,
+    fontSize: "larger",
   },
 });
 
