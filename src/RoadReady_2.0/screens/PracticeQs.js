@@ -39,6 +39,8 @@ const PracticeQs = (props) => {
   let categories = props.route.params.categories
   const limit = 1
   const coll = collection(db, "Quiz",auth.currentUser.email, "attempts")
+  const navigation = useNavigation();
+
 
   const resetQuiz = () => {
     setNum("1")
@@ -194,13 +196,13 @@ const PracticeQs = (props) => {
                 </View>
                 <View style={styles.allans}>
                   <View style={[styles.a, styles.aSpaceBlock]}>
-                    <Pressable onPress={() => setSelect(a1)} style={(select == a1) ? [styles.aParent, styles.parentFlexBoxSelect] : [styles.aParent, styles.parentFlexBox]}>
+                    <Pressable onPress={() => setSelect(a1)} style={ (ans == select && select == a1) ? [styles.aParent, styles.parentFlexBoxCorrect] : (select == a1) ? [styles.aParent, styles.parentFlexBoxSelect] : [styles.aParent, styles.parentFlexBox]}>
                       <Text style={[styles.a1, styles.answerTypo]}>A</Text>
                       <Text style={[styles.answer, styles.answerTypo]}>{a1}</Text>
                     </Pressable>
                   </View>
                   <View style={[styles.b, styles.aSpaceBlock]}>
-                    <Pressable onPress={() => setSelect(a2)} style={(select == a2) ? [styles.bParent, styles.parentFlexBoxSelect] :[styles.bParent, styles.parentFlexBox]}>
+                    <Pressable onPress={() => setSelect(a2)} style={(ans == select && select == a2) ? [styles.aParent, styles.parentFlexBoxCorrect] :(select == a2) ? [styles.bParent, styles.parentFlexBoxSelect] :[styles.bParent, styles.parentFlexBox]}>
                       <Text style={[styles.a1, styles.answerTypo]}>B</Text>
                       <Text style={[styles.answer1, styles.answerTypo]}>
                         {a2}
@@ -208,7 +210,7 @@ const PracticeQs = (props) => {
                     </Pressable>
                   </View>
                   <View style={[styles.b, styles.aSpaceBlock]}>
-                    <Pressable onPress={() => setSelect(a3)} style={(select == a3) ? [styles.bParent, styles.parentFlexBoxSelect] : [styles.bParent, styles.parentFlexBox]}>
+                    <Pressable onPress={() => setSelect(a3)} style={ (ans == select && select == a3) ? [styles.aParent, styles.parentFlexBoxCorrect] :(select == a3) ? [styles.bParent, styles.parentFlexBoxSelect] : [styles.bParent, styles.parentFlexBox]}>
                       <Text style={[styles.a1, styles.answerTypo]}>C</Text>
                       <Text style={[styles.answer2, styles.answerTypo]}>
                         {a3}
@@ -216,7 +218,7 @@ const PracticeQs = (props) => {
                     </Pressable>
                   </View>
                   <View style={[styles.b, styles.aSpaceBlock]}>
-                    <Pressable onPress={() => setSelect(a4)} style={(select == a4) ? [styles.dParent, styles.parentFlexBoxSelect] : [styles.dParent, styles.parentFlexBox]}>
+                    <Pressable onPress={() => setSelect(a4)} style={(ans == select && select == a4) ? [styles.aParent, styles.parentFlexBoxCorrect] :(select == a4) ? [styles.dParent, styles.parentFlexBoxSelect] : [styles.dParent, styles.parentFlexBox]}>
                       <Text style={[styles.a1, styles.answerTypo]}>D</Text>
                       <Text style={[styles.answer3, styles.answerTypo]}>
                         {a4}
@@ -289,6 +291,13 @@ const styles = StyleSheet.create({
   parentFlexBoxSelect: {
     paddingVertical: Padding.p_mini,
     backgroundColor: Color.red2,
+    borderRadius: Border.br_3xs,
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  parentFlexBoxCorrect: {
+    paddingVertical: Padding.p_mini,
+    backgroundColor: Color.GreenCorrect,
     borderRadius: Border.br_3xs,
     flexDirection: "row",
     alignItems: "center",
@@ -440,9 +449,11 @@ const styles = StyleSheet.create({
   },
   nextButton: {
     backgroundColor: Color.red2,
+    margin: 10,
   },
   button1: {
     marginLeft: 20,
+    marginRight: 20,
     justifyContent: "center",
     alignItems: "center",
     flex: 1,

@@ -46,7 +46,7 @@ const DrivingTest = () => {
             <TouchableOpacity
               style={styles.charlestownSpaceBlock}
               activeOpacity={0.2}
-              onPress={() => navigation.navigate("TestRoute")}
+              onPress={() => navigation.navigate("TestRoute",{name: "charlestown"})}
             >
               <Text style={[styles.charlestown1, styles.selectATestTypo]}>
                 Charlestown
@@ -55,7 +55,7 @@ const DrivingTest = () => {
             <TouchableOpacity
               style={[styles.dunLaoghaire, styles.charlestownSpaceBlock]}
               activeOpacity={0.2}
-              onPress={() => navigation.navigate("TestRoute")}
+              onPress={() => navigation.navigate("TestRoute",{name: "Dun Laoghaire/Deansgrange"})}
             >
               <Text style={[styles.charlestown1, styles.selectATestTypo]}>
                 Dun Laoghaire/Deansgrange
@@ -64,7 +64,7 @@ const DrivingTest = () => {
             <TouchableOpacity
               style={[styles.dunLaoghaire, styles.charlestownSpaceBlock]}
               activeOpacity={0.2}
-              onPress={() => navigation.navigate("TestRoute")}
+              onPress={() => navigation.navigate("TestRoute",{name: "Finglas"})}
             >
               <Text style={[styles.charlestown1, styles.selectATestTypo]}>
                 Finglas
@@ -73,7 +73,7 @@ const DrivingTest = () => {
             <TouchableOpacity
               style={[styles.dunLaoghaire, styles.charlestownSpaceBlock]}
               activeOpacity={0.2}
-              onPress={() => navigation.navigate("TestRoute")}
+              onPress={() => navigation.navigate("TestRoute",{name: "Killester"})}
             >
               <Text style={[styles.charlestown1, styles.selectATestTypo]}>
                 Killester
@@ -82,7 +82,7 @@ const DrivingTest = () => {
             <TouchableOpacity
               style={[styles.dunLaoghaire, styles.charlestownSpaceBlock]}
               activeOpacity={0.2}
-              onPress={() => navigation.navigate("TestRoute")}
+              onPress={() => navigation.navigate("TestRoute",{name: "Mulladdart"})}
             >
               <Text style={[styles.charlestown1, styles.selectATestTypo]}>
                 Mulladdart
@@ -91,7 +91,7 @@ const DrivingTest = () => {
             <TouchableOpacity
               style={[styles.dunLaoghaire, styles.charlestownSpaceBlock]}
               activeOpacity={0.2}
-              onPress={() => navigation.navigate("TestRoute")}
+              onPress={() => navigation.navigate("TestRoute",{name: "Mulladdart/Maple House"})}
             >
               <Text style={[styles.charlestown1, styles.selectATestTypo]}>
                 Mulladdart/Maple House
