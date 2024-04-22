@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback,useEffect } from "react";
 import {
   ScrollView,
   Text,
@@ -12,9 +12,36 @@ import PopUp from "../components/PopUp";
 import { useNavigation } from "@react-navigation/native";
 import TitleBar from "../components/TitleBar";
 import { FontSize, Padding, Color, Border, FontFamily } from "../GlobalStyles";
+import { doc, getDoc, setDoc, collection, addDoc, getCountFromServer, getDocs } from "firebase/firestore";
+import { auth, db } from '../firebaseConfig'
+import { CountdownCircleTimer } from 'react-native-countdown-circle-timer'
+import Results from "./Results";
 
-const Test = () => {
+const Test = (props) => {
   const [butttonVisible, setButttonVisible] = useState(false);
+  const [num, setNum] = useState("1")
+  const [img, setImg] = useState()
+  const [q, setQ] = useState()
+  const [a1, setA1] = useState()
+  const [a2, setA2] = useState()
+  const [a3, setA3] = useState()
+  const [a4, setA4] = useState()
+  const [ans, setAns] = useState()
+  const [count, setCount] = useState(0)
+  const [cat, setCat] = useState(0)
+  const [select, setSelect] = useState()
+  const [cat1, setCat1] = useState([])
+  const [cat2, setCat2] = useState([])
+  const [cat3, setCat3] = useState([])
+  const [cat4, setCat4] = useState([])
+  const [cat5, setCat5] = useState([])
+  const [docs, setDocs] = useState()
+  const [time, setTime] = useState("active")
+
+  let categories = props.route.params.categories
+  const limit = 1
+  const coll = collection(db, "Quiz",auth.currentUser.email, "attempts")
+
   const navigation = useNavigation();
 
   const openButtton = useCallback(() => {
@@ -25,115 +52,212 @@ const Test = () => {
     setButttonVisible(false);
   }, []);
 
+  const resetQuiz = () => {
+    setNum("1")
+    setCount(0)
+    setCat(0)
+    setSelect(null)
+    setCat1([])
+    setCat2([])
+    setCat3([])
+    setCat4([])
+    setCat5([])
+    setDocs(null)
+    setTime("active")
+  }
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const snapshot = await getDocs(coll);
+        const numDocs = snapshot.size;
+        console.log("Number of documents:", numDocs);
+        setDocs(numDocs + 1)
+        // Handle the snapshot data as needed
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchData();
+  }, [coll]);
+
+  function NextQ(){
+    setCount(count + 1)
+    setSelect(null)
+    if(cat == (categories.length - 1)){
+      setCat(0)
+    }
+    else if(Number(num) == limit){
+      setNum("1")
+      setCat(cat + 1)
+    }
+    else if(Number(num) < limit){
+      setNum((Number(num) + 1).toString())
+    }
+    if(ans == select){
+      switch (cat) {
+        case 0:
+          setCat1(cat1.concat(num))
+          break;
+        case 1:
+          setCat2(cat2.concat(num))
+          break;
+        case 2:
+          setCat3(cat3.concat(num))
+          break;
+        case 3:
+          setCat4(cat4.concat(num))
+          break;
+        case 4:
+          setCat5(cat5.concat(num))
+          break;
+      }
+    }
+  }
+
+  useEffect(() => {
+    console.log(count >= (categories.length))
+    if(count >= (categories.length) || time == "Finished") {
+      const score = cat1.length + cat2.length + cat3.length + cat4.length + cat5.length
+      console.log(score)
+      setDoc(doc(db, "Quiz", auth.currentUser.email, "attempts", String(docs)),{result: ((score) > (count / 1.33) ? "Pass": "Fail"), score: (String(score) + "/" + (String(count)))})
+    }
+  }, [count, time])
+
+  useEffect(() => {
+    const fetchDoc = async () => {
+      try {
+        const docSnapshot = await getDoc(docRef);
+        if (docSnapshot.exists()) {
+          const data = docSnapshot.data();
+          setA1(data.A1);
+          setA2(data.A2);
+          setA3(data.A3);
+          setA4(data.A4);
+          setAns(data.AA);
+          setQ(data.Q);
+          setImg(data.i)
+        }
+      } catch (error) {
+        console.error("Error fetching document:", error);
+      }
+    };
+  
+    fetchDoc();
+  }, [cat, num]);
+
+  const docRef = doc(db, categories[cat], num);
+
+  
+
+
   return (
     <>
+    {(() => {
+      if (count < (categories.length) && time != "Finished") {
+        return (
       <View style={styles.test}>
-        <TitleBar
-          home="Quit"
-          hamburgerOnOffFlex={1}
-          onButttonPress={openButtton}
-          onHamburgerOnOffPress={() => navigation.toggleDrawer()}
-        />
-        <ScrollView
-          style={styles.main}
-          showsVerticalScrollIndicator={true}
-          showsHorizontalScrollIndicator={false}
-          contentContainerStyle={styles.mainScrollViewContent}
-        >
-          <View style={styles.qNum}>
-            <Text style={styles.question}>Question</Text>
-            <Text style={[styles.text, styles.textTypo]}>19/25</Text>
-          </View>
-          <View style={[styles.mainImg, styles.mainImgFlexBox]}>
-            <Image
-              style={styles.qImgPlaceholderIcon}
-              contentFit="cover"
-              source={require("../assets/q-img-placeholder.png")}
-            />
-          </View>
-          <View style={[styles.answerSelection, styles.mainImgFlexBox]}>
-            <View style={[styles.question1, styles.aSpaceBlock]}>
-              <Text style={[styles.whatShouldYou, styles.textTypo]}>
-                What should you do if fog closes in completely while you are
-                driving, and visibility is reduced to near zero?
-              </Text>
-            </View>
-            <View style={styles.allans}>
-              <View style={[styles.a, styles.aSpaceBlock]}>
-                <Pressable style={[styles.aParent, styles.parentFlexBox]}>
-                  <Text style={styles.a1}>A</Text>
-                  <Text style={[styles.answer, styles.answerTypo]}>Answer</Text>
-                </Pressable>
+            <TitleBar
+              home="Quit"
+              hamburgerOnOffFlex={1}
+              onButttonPress={() => navigation.goBack()}
+              onHamburgerOnOffPress={() => navigation.toggleDrawer()} />
+            <ScrollView
+              style={styles.main}
+              showsVerticalScrollIndicator={true}
+              showsHorizontalScrollIndicator={false}
+              contentContainerStyle={styles.mainScrollViewContent}
+            >
+                <CountdownCircleTimer
+                  isPlaying
+                  duration={3}
+                  colors={['#004777', '#F7B801', '#A30000', '#A30000']}
+                  colorsTime={[7, 5, 2, 0]}
+                  size={50}
+                  strokeWidth={5}
+                  onUpdate={(remainingTime) => setTime(remainingTime)}
+                  onComplete={() => setTime("Finished")}
+                  >
+                    {({ remainingTime }) => <Text>{Math.floor(remainingTime / 60)}: {remainingTime % 60}</Text>}
+                </CountdownCircleTimer>
+              <View style={styles.qNum}>
+                <Text style={styles.question}>Question</Text>
+                <Text style={[styles.text, styles.textTypo]}>{count}/40</Text>
               </View>
-              <View style={[styles.b, styles.aSpaceBlock]}>
-                <Pressable style={[styles.bParent, styles.parentFlexBox]}>
-                  <Text style={styles.a1}>B</Text>
-                  <Text style={[styles.answer1, styles.answerTypo]}>
-                    Answer
-                  </Text>
-                </Pressable>
+              <View style={[styles.mainImg, styles.mainImgFlexBox]}>
+                <Image
+                  style={styles.qImgPlaceholderIcon}
+                  contentFit="cover"
+                  source={require("../assets/q-img-placeholder.png")} />
               </View>
-              <View style={[styles.b, styles.aSpaceBlock]}>
-                <Pressable style={[styles.bParent, styles.parentFlexBox]}>
-                  <Text style={styles.a1}>C</Text>
-                  <Text style={[styles.answer2, styles.answerTypo]}>
-                    Answer
-                  </Text>
-                </Pressable>
-              </View>
-              <View style={[styles.b, styles.aSpaceBlock]}>
-                <View style={[styles.dParent, styles.parentFlexBox]}>
-                  <Text style={styles.a1}>D</Text>
-                  <Text style={[styles.answer3, styles.answerTypo]}>
-                    Answer
+              <View style={[styles.answerSelection, styles.mainImgFlexBox]}>
+                <View style={[styles.question1, styles.aSpaceBlock]}>
+                  <Text style={[styles.whatShouldYou, styles.textTypo]}>
+                    {q}
                   </Text>
                 </View>
-              </View>
-            </View>
-          </View>
-          <View style={[styles.previousNext, styles.aSpaceBlock]}>
-            <Pressable style={styles.button}>
-              <View style={[styles.previous, styles.previousFlexBox]}>
-                <View style={styles.ionarrowBackParent}>
-                  <Image
-                    style={styles.ionarrowIconLayout}
-                    contentFit="cover"
-                    source={require("../assets/ionarrowback.png")}
-                  />
-                  <Text style={[styles.previous1, styles.nextTypo]}>
-                    Previous
-                  </Text>
+                <View style={styles.allans}>
+                  <View style={[styles.a, styles.aSpaceBlock]}>
+                    <Pressable onPress={() => setSelect(a1)} style={select == a1 ? [styles.aParent, styles.parentFlexBoxSelect] : [styles.aParent, styles.parentFlexBox]}>
+                      <Text style={styles.a1}>A</Text>
+                      <Text style={[styles.answer, styles.answerTypo]}>{a1}</Text>
+                    </Pressable>
+                  </View>
+                  <View style={[styles.b, styles.aSpaceBlock]}>
+                    <Pressable onPress={() => setSelect(a2)} style={select == a2 ? [styles.bParent, styles.parentFlexBoxSelect] :[styles.bParent, styles.parentFlexBox]}>
+                      <Text style={styles.a1}>B</Text>
+                      <Text style={[styles.answer1, styles.answerTypo]}>
+                        {a2}
+                      </Text>
+                    </Pressable>
+                  </View>
+                  <View style={[styles.b, styles.aSpaceBlock]}>
+                    <Pressable onPress={() => setSelect(a3)} style={select == a3 ? [styles.cParent, styles.parentFlexBoxSelect] :[styles.bParent, styles.parentFlexBox]}>
+                      <Text style={styles.a1}>C</Text>
+                      <Text style={[styles.answer2, styles.answerTypo]}>
+                        {a3}
+                      </Text>
+                    </Pressable>
+                  </View>
+                  <View style={[styles.b, styles.aSpaceBlock]}>
+                    <Pressable onPress={() => setSelect(a4)} style={select == a4 ? [styles.dParent, styles.parentFlexBoxSelect] :[styles.dParent, styles.parentFlexBox]}>
+                      <Text style={styles.a1}>D</Text>
+                      <Text style={[styles.answer3, styles.answerTypo]}>
+                        {a4}
+                      </Text>
+                    </Pressable>
+                  </View>
                 </View>
               </View>
-            </Pressable>
-            <View style={styles.button1}>
-              <Pressable style={[styles.nextButton, styles.previousFlexBox]}>
-                <View style={styles.ionarrowBackParent}>
-                  <Text style={[styles.next, styles.nextTypo]}>Next</Text>
-                  <Image
-                    style={[
-                      styles.ionarrowForwardOutlineIcon,
-                      styles.ionarrowIconLayout,
-                    ]}
-                    contentFit="cover"
-                    source={require("../assets/ionarrowforwardoutline.png")}
-                  />
+              <View style={[styles.previousNext, styles.aSpaceBlock]}>
+                <View style={styles.button1}>
+                  <Pressable onPress={() => NextQ()} style={[styles.nextButton, styles.previousFlexBox]}>
+                    <View style={styles.ionarrowBackParent}>
+                      <Text style={[styles.next, styles.nextTypo]}>Next</Text>
+                      <Image
+                        style={[
+                          styles.ionarrowForwardOutlineIcon,
+                          styles.ionarrowIconLayout,
+                        ]}
+                        contentFit="cover"
+                        source={require("../assets/ionarrowforwardoutline.png")} />
+                    </View>
+                  </Pressable>
                 </View>
-              </Pressable>
-            </View>
+              </View>
+            </ScrollView>
           </View>
-        </ScrollView>
-      </View>
-
-      <Modal animationType="fade" transparent visible={butttonVisible}>
-        <View style={styles.butttonOverlay}>
-          <Pressable style={styles.butttonBg} onPress={closeButtton} />
-          <PopUp onClose={closeButtton} />
-        </View>
-      </Modal>
-    </>
   );
-};
+    } else {
+      return (
+        <Results score = {cat1.length + cat2.length + cat3.length + cat4.length + cat5.length} count = {count} reset = {resetQuiz} time = {time}/>
+      );
+    }
+    })()}
+    </>
+  )
+}
 
 const styles = StyleSheet.create({
   mainScrollViewContent: {
@@ -163,6 +287,14 @@ const styles = StyleSheet.create({
     paddingVertical: Padding.p_mini,
     backgroundColor: Color.colorDarkslategray_200,
     borderRadius: Border.br_3xs,
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  parentFlexBoxSelect: {
+    paddingVertical: Padding.p_mini,
+    backgroundColor: Color.colorDarkslategray_200,
+    borderRadius: Border.br_3xs,
+    border: 'solid',
     flexDirection: "row",
     alignItems: "center",
   },
@@ -360,6 +492,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: Color.colorWhite,
   },
+
 });
 
 export default Test;

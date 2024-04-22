@@ -15,7 +15,7 @@ const Results = (props) => {
         onButttonPress={() => navigation.goBack()}
         onHamburgerOnOffPress={() => navigation.toggleDrawer()}
       />
-      <MainSection score = {props.score} count = {props.count} reset = {props.reset}/>
+      <MainSection score = {props.score} count = {props.count} reset = {props.reset} time = {props.time}/>
     </View>
   );
 };

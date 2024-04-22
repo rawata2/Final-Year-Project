@@ -28,14 +28,14 @@ const MainSection = (props) => {
           contentFit="cover"
           source={require("../assets/ellipse-11.png")}
         />
-        <Text style={styles.drivingTestPassed}>{(props.score > (props.count / 1.33)) ? "driving Test Passed" : "driving Test Failed"}</Text>
+        <Text style={styles.drivingTestPassed}>{(props.score > (props.count / 1.33)) ? "Driving Test Passed" : "Driving Test Failed"}</Text>
         <View style={styles.stat}>
           <View style={styles.resultsFlexBox}>
             <Text style={styles.text}>{props.score}/{props.count}</Text>
             <Text style={[styles.results1, styles.time1FlexBox]}>Results</Text>
           </View>
           <View style={styles.resultsFlexBox}>
-            <Text style={styles.text1}>13:20</Text>
+            <Text style={styles.text1}>{props.time ? props.time == "Finished" ? "Expired": Math.floor(props.time / 60) + ":" + (props.time % 60) :  "Not Timed"}</Text>
             <Text style={[styles.time1, styles.time1FlexBox]}>Time</Text>
           </View>
         </View>
@@ -147,7 +147,7 @@ const styles = StyleSheet.create({
     color: Color.colorDarkslategray_100,
     fontSize: FontSize.subHeading_size,
     fontFamily: FontFamily.subheadlineBold,
-    alignSelf: "stretch",
+    alignSelf: "center",
   },
   time1: {
     fontSize: FontSize.size_smi_6,
