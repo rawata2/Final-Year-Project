@@ -81,7 +81,7 @@ const SidePanel1 = ({ state, navigation }) => {
             <Image
               style={styles.group3Icon}
               contentFit="cover"
-              source={require("../assets/group3.png")}
+              source={require("../assets/pngwing.com.png")}
             />
           </View>
           <View style={styles.helloParent}>
