@@ -8,7 +8,6 @@ import { Image } from "expo-image";
 const TestRoute = ({route}) => {
   const navigation = useNavigation();
   const name = route.params.name
-  console.log(name)
   return (
     <View style={[styles.testRoute, styles.testFlexBox]}>
       <TitleBar

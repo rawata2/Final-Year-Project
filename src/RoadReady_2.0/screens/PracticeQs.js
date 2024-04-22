@@ -61,7 +61,6 @@ const PracticeQs = (props) => {
       try {
         const snapshot = await getDocs(coll);
         const numDocs = snapshot.size;
-        console.log("Number of documents:", numDocs);
         setDocs(numDocs + 1)
         // Handle the snapshot data as needed
       } catch (error) {
@@ -107,15 +106,11 @@ const PracticeQs = (props) => {
   }
 
   useEffect(() => {
-    console.log(count >= (categories.length))
     if(count >= (categories.length)) {
       const score = cat1.length + cat2.length + cat3.length + cat4.length + cat5.length
-      console.log(score)
       setDoc(doc(db, "Quiz", auth.currentUser.email, "attempts", String(docs)),{result: ((score) > (count / 1.33) ? "Pass": "Fail"), score: (String(score) + "/" + (String(count)))})
     }
   }, [count])
-
-  console.log(select)
 
   useEffect(() => {
     const fetchDoc = async () => {

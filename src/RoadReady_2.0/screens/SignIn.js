@@ -49,7 +49,7 @@ const SignIn = () => {
 
     return unsubscribe
   }, [])
-console.log(auth)
+  
   return (
     <View style={[styles.signIn, styles.signInFlexBox]}>
       <View style={[styles.titlebar, styles.titlebarFlexBox]}>

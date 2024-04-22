@@ -49,7 +49,6 @@ const SidePanel1 = ({ state, navigation }) => {
       .catch(error => alert(error.message))
   }
 
-  console.log(auth)
   return (
     <View style={styles.sidePanel}>
       <View style={styles.titlebar}>

@@ -34,7 +34,6 @@ const Form = () => {
         email: email, name: username
       });
       console.log('Registered with:', user.email);
-      console.log(userCredentials)
       updateProfile(user, {
         displayName: username
       })

@@ -17,7 +17,6 @@ const TestHistory = () => {
         const snapshot = await getDocs(coll);
         const doclean = snapshot.docs.length
         setDocs(snapshot.docs)
-        console.log("Number of documents:", snapshot.docs);
         // Handle the snapshot data as needed
       } catch (error) {
         console.error("Error fetching data:", error);
