@@ -171,7 +171,7 @@ const Test = (props) => {
             >
                 <CountdownCircleTimer
                   isPlaying
-                  duration={3}
+                  duration={300}
                   colors={['#004777', '#F7B801', '#A30000', '#A30000']}
                   colorsTime={[7, 5, 2, 0]}
                   size={50}

@@ -6,8 +6,8 @@ import {
   View,
   Pressable,
   Modal,
+  Image,
 } from "react-native";
-import { Image } from "expo-image";
 import PopUp from "../components/PopUp";
 import { useNavigation } from "@react-navigation/native";
 import TitleBar from "../components/TitleBar";
@@ -19,7 +19,7 @@ import Results from "./Results";
 const PracticeQs = (props) => {
   const [butttonVisible, setButttonVisible] = useState(false);
   const [num, setNum] = useState("1")
-  const [img, setImg] = useState()
+  const [img, setImg] = useState("../assets/image-20240207-002627370-2.png")
   const [q, setQ] = useState()
   const [a1, setA1] = useState()
   const [a2, setA2] = useState()
@@ -40,6 +40,7 @@ const PracticeQs = (props) => {
   const limit = 1
   const coll = collection(db, "Quiz",auth.currentUser.email, "attempts")
   const navigation = useNavigation();
+  const image = ["../assets/y_image.png","../assets/s_image.png", "../assets/r_image.png" ]
 
 
   const resetQuiz = () => {
@@ -181,8 +182,7 @@ const PracticeQs = (props) => {
               <View style={[styles.mainImg, styles.mainImgFlexBox]}>
                 <Image
                   style={styles.qImgPlaceholderIcon}
-                  contentFit="cover"
-                  source={img ? img : require("../assets/image-20240207-002627370-2.png")}
+                  source={img == image[0] ? require("../assets/y_image.png"): img == image[1]? require("../assets/s_image.png") : require("../assets/r_image.png")}
                 />
               </View>
               <View style={[styles.answerSelection, styles.mainImgFlexBox]}>
