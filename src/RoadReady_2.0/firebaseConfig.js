@@ -23,5 +23,5 @@ const firebaseConfig = {
   
   
   export { auth, db};
-  
-// see the Firebase documentation: https://firebase.google.com/docs/web/setup#access-firebase
+
+//Used the Firebase documentation: https://firebase.google.com/docs/web/setup#access-firebase

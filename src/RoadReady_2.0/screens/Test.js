@@ -200,30 +200,30 @@ const Test = (props) => {
                 <View style={styles.allans}>
                   <View style={[styles.a, styles.aSpaceBlock]}>
                     <Pressable onPress={() => setSelect(a1)} style={select == a1 ? [styles.aParent, styles.parentFlexBoxSelect] : [styles.aParent, styles.parentFlexBox]}>
-                      <Text style={styles.a1}>A</Text>
-                      <Text style={[styles.answer, styles.answerTypo]}>{a1}</Text>
+                      <Text style={select == a1 ? styles.a1Select :styles.a1}>A</Text>
+                      <Text style={select == a1 ? [styles.answer, styles.answerTypoSelect] :[styles.answer, styles.answerTypo]}>{a1}</Text>
                     </Pressable>
                   </View>
                   <View style={[styles.b, styles.aSpaceBlock]}>
                     <Pressable onPress={() => setSelect(a2)} style={select == a2 ? [styles.bParent, styles.parentFlexBoxSelect] :[styles.bParent, styles.parentFlexBox]}>
-                      <Text style={styles.a1}>B</Text>
-                      <Text style={[styles.answer1, styles.answerTypo]}>
+                      <Text style={select == a2 ? styles.a1Select :styles.a1}>B</Text>
+                      <Text style={select == a2 ? [styles.answer1, styles.answerTypoSelect] :[styles.answer1, styles.answerTypo]}>
                         {a2}
                       </Text>
                     </Pressable>
                   </View>
                   <View style={[styles.b, styles.aSpaceBlock]}>
                     <Pressable onPress={() => setSelect(a3)} style={select == a3 ? [styles.cParent, styles.parentFlexBoxSelect] :[styles.bParent, styles.parentFlexBox]}>
-                      <Text style={styles.a1}>C</Text>
-                      <Text style={[styles.answer2, styles.answerTypo]}>
+                      <Text style={select == a3 ? styles.a1Select :styles.a1}>C</Text>
+                      <Text style={select == a3 ? [styles.answer2, styles.answerTypoSelect] : [styles.answer2, styles.answerTypo]}>
                         {a3}
                       </Text>
                     </Pressable>
                   </View>
                   <View style={[styles.b, styles.aSpaceBlock]}>
                     <Pressable onPress={() => setSelect(a4)} style={select == a4 ? [styles.dParent, styles.parentFlexBoxSelect] :[styles.dParent, styles.parentFlexBox]}>
-                      <Text style={styles.a1}>D</Text>
-                      <Text style={[styles.answer3, styles.answerTypo]}>
+                      <Text style={select == a4 ? styles.a1Select :styles.a1}>D</Text>
+                      <Text style={select == a4 ? [styles.answer3, styles.answerTypoSelect] : [styles.answer3, styles.answerTypo]}>
                         {a4}
                       </Text>
                     </Pressable>
@@ -292,14 +292,21 @@ const styles = StyleSheet.create({
   },
   parentFlexBoxSelect: {
     paddingVertical: Padding.p_mini,
-    backgroundColor: Color.colorDarkslategray_200,
+    backgroundColor: 'black',
     borderRadius: Border.br_3xs,
-    border: 'solid',
     flexDirection: "row",
     alignItems: "center",
   },
   answerTypo: {
     color: Color.lightLabelPrimary,
+    textAlign: "center",
+    fontFamily: FontFamily.subHeading,
+    fontWeight: "600",
+    fontSize: FontSize.size_base,
+    letterSpacing: 0,
+  },
+  answerTypoSelect: {
+    color: 'white',
     textAlign: "center",
     fontFamily: FontFamily.subHeading,
     fontWeight: "600",
@@ -386,6 +393,14 @@ const styles = StyleSheet.create({
   },
   a1: {
     color: Color.colorGray_200,
+    textAlign: "center",
+    fontFamily: FontFamily.subHeading,
+    fontWeight: "600",
+    fontSize: FontSize.size_base,
+    letterSpacing: 0,
+  },
+  a1Select: {
+    color: 'white',
     textAlign: "center",
     fontFamily: FontFamily.subHeading,
     fontWeight: "600",
