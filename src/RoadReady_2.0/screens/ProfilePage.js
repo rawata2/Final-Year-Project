@@ -13,7 +13,7 @@ import { useNavigation } from "@react-navigation/native";
 import TitleBar from "../components/TitleBar";
 import { Padding, Color, Border, FontFamily, FontSize } from "../GlobalStyles";
 import { useState } from 'react';
-import { getAuth, updateEmail ,sendEmailVerification, updatePassword, reauthenticateWithCredential, EmailAuthProvider } from 'firebase/auth';
+import { getAuth, signOut, updateEmail ,sendEmailVerification, updatePassword, reauthenticateWithCredential, EmailAuthProvider } from 'firebase/auth';
 
 const ProfilePage = () => {
   const auth = getAuth();
@@ -26,13 +26,26 @@ const ProfilePage = () => {
   const [newPassword, setNewPassword] = useState('');
   const [confirmNewPassword, setConfirmNewPassword] = useState('');
 
+    // Function to sign out the user
+    const handleSignOut = async () => {
+      try {
+        await signOut(auth);
+        // Redirect the user to the login or home screen (adjust as needed)
+        navigation.navigate('SignIn'); // Replace 'Login' with your desired screen name
+      } catch (error) {
+        console.error('Error signing out:', error);
+        // Handle any error related to sign-out (e.g., show an alert)
+      }
+    };
+
+    
   // Function to validate email format
   const isValidEmail = (email) => {
     const regex = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,7}$/;
     return regex.test(email);
   };
 
-  // Function to change user email
+ // Function to change user email
   const changeUserEmail = async (newEmail) => {
     if (!user) {
       alert('User not authenticated. Please sign in first.');
@@ -55,31 +68,33 @@ const ProfilePage = () => {
     }
   };
 
-  // Function to change user password
-  const changeUserPassword = async (currentPassword, newPassword) => {
-    if (!currentPassword || !newPassword) {
-      alert('Please enter both your current password and a new password.');
-      return false;
-    }
+// Function to change user password
+const changeUserPassword = async (currentPassword, newPassword) => {
+  if (!currentPassword || !newPassword) {
+    alert('Please enter both your current password and a new password.');
+    return false;
+  }
 
-    const credential = EmailAuthProvider.credential(user.email, currentPassword);
+  const credential = EmailAuthProvider.credential(user.email, currentPassword);
 
-    try {
-      // Validate current password
-      await reauthenticateWithCredential(user, credential);
-      // User re-authenticated, now update the password
-      await updatePassword(user, newPassword);
-      return true; // Indicate success
-    } catch (error) {
-      if (error.code === 'auth/wrong-password') {
-        alert('Please type in the correct current password.');
-      } else {
-        alert('Error updating password: ' + error.message);
-      }
-      console.error('Error updating password:', error);
-      return false;
+  try {
+    // Validate current password
+    await reauthenticateWithCredential(user, credential);
+    // User re-authenticated, now update the password
+    await updatePassword(user, newPassword);
+    alert('Password updated successfully!');
+    return true;
+  } catch (error) {
+    if (error.code === 'auth/wrong-password') {
+      alert('Please type in the correct current password.');
+    } else {
+      alert('Error updating password: ' + error.message);
     }
-  };
+    console.error('Error updating password:', error);
+    return false;
+  }
+};
+
 
   // Combined event handler for changing email and password
   const handleUpdate = async () => {
@@ -105,15 +120,11 @@ const ProfilePage = () => {
     }
 
     // Alert the user based on what was updated
-    if (emailUpdated || passwordUpdated) {
-      const message = emailUpdated && passwordUpdated
-        ? 'Email and password updated successfully!'
-        : emailUpdated
-        ? 'Email updated successfully!'
-        : 'Password updated successfully!';
-      alert(message);
+    if (emailUpdated && passwordUpdated) {
+      alert('Email and password updated successfully!');
     }
   };
+
 
   return (
     <View style={styles.profilePage}>
@@ -244,18 +255,16 @@ const ProfilePage = () => {
               </View>
             </Pressable>
             <TouchableOpacity
-              style={styles.signOut}
-              activeOpacity={0.2}
-              onPress={() => handleSignOut()}
-            >
-              <View style={[styles.button, styles.buttonFlexBox]}>
-                <Text
-                  style={[styles.confirmChanges, styles.changePasswordTypo]}
-                >
-                  Sign Out
-                </Text>
-              </View>
-            </TouchableOpacity>
+                style={styles.signOut}
+                activeOpacity={0.2}
+                onPress={handleSignOut} // Call the sign-out function here
+              >
+                <View style={[styles.button, styles.buttonFlexBox]}>
+                  <Text style={[styles.confirmChanges, styles.changePasswordTypo]}>
+                    Sign Out
+                  </Text>
+                </View>
+              </TouchableOpacity>
           </View>
         </View>
       </ScrollView>
