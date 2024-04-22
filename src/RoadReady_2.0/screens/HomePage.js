@@ -30,7 +30,7 @@ const HomePage = () => {
   return (
     <View style={[styles.homepage, styles.homepageLayout]}>
       <View style={[styles.titlebar, styles.titlebarFlexBox]}>
-      <Text style={styles.titlefont}>Welcome {auth.currentUser.displayName}</Text>
+      <Text style={styles.titlefont}>Welcome {auth.currentUser.displayName ? auth.currentUser.displayName : "User" }</Text>
       </View>
       <ScrollView
         style={styles.main}

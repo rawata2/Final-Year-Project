@@ -86,7 +86,7 @@ const SidePanel1 = ({ state, navigation }) => {
           </View>
           <View style={styles.helloParent}>
             <Text style={styles.hello}>Hello</Text>
-            <Text style={[styles.user, styles.userTypo]}>{auth.currentUser.displayName}</Text>
+            <Text style={[styles.user, styles.userTypo]}>{auth.currentUser.displayName ? auth.currentUser.displayName : "User"}</Text>
           </View>
         </View>
         <View style={styles.menuChild} />

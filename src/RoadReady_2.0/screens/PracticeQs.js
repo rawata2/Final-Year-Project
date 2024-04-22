@@ -105,13 +105,6 @@ const PracticeQs = (props) => {
     }
   }
 
-  // function Marking(){
-  //   if(count >= (categories.length - 1)){() => {
-  //     const score = cat1.length + cat2.length + cat3.length + cat4.length + cat5.length
-  //     setDoc(doc(db, "Quiz", auth.currentUser.email, "attempts", String(docs)),{result: ((score) > (count / 1.33) ? "Pass": "Fail"), score: (String(count + 1) + "/" + String(score))})
-  //   }}
-  // }
-
   useEffect(() => {
     console.log(count >= (categories.length))
     if(count >= (categories.length)) {
@@ -173,7 +166,11 @@ const PracticeQs = (props) => {
               showsVerticalScrollIndicator={true}
               showsHorizontalScrollIndicator={false}
               contentContainerStyle={styles.mainScrollViewContent}
-            >
+            >            
+            <View style={styles.qNum}>
+              <Text style={styles.question1}>Question</Text>
+              <Text style={[styles.text, styles.textTypo]}>{count}/{categories.length}</Text>
+            </View>
               <View style={[styles.category, styles.mainImgSpaceBlock]}>
                 <View style={styles.categoryName}>
                   <Text style={[styles.roadAndTraffic, styles.answerTypo]}>
@@ -271,8 +268,15 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     letterSpacing: 0,
   },
+  textTypo: {
+    lineHeight: 28,
+    fontSize: FontSize.size_base,
+    textAlign: "left",
+    letterSpacing: 0,
+  },
   mainImgFlexBox: {
     marginTop: 16,
+    display: 'flex',
     justifyContent: "center",
     alignItems: "center",
   },
@@ -332,6 +336,28 @@ const styles = StyleSheet.create({
     left: 0,
     top: 0,
   },
+  question1: {
+    fontSize: FontSize.size_lg,
+    lineHeight: 20,
+    textTransform: "capitalize",
+    textAlign: "left",
+    letterSpacing: 0,
+    color: Color.colorText2,
+    fontFamily: FontFamily.robotoRegular,
+  },
+  text: {
+    marginLeft: 20,
+    color: Color.colorText2,
+    fontFamily: FontFamily.robotoRegular,
+    lineHeight: 28,
+    fontSize: FontSize.size_base,
+  },
+  qNum: {
+    justifyContent: "center",
+    flexDirection: "row",
+    alignItems: "center",
+    marginTop: 10,
+  },
   roadAndTraffic: {
     color: Color.lightLabelPrimary,
     alignSelf: "stretch",
@@ -356,14 +382,15 @@ const styles = StyleSheet.create({
     maxWidth: "100%",
     height: 205,
     borderRadius: Border.br_3xs,
-    alignSelf: "stretch",
+    alignSelf: 'center',
     overflow: "hidden",
-    width: "100%",
+    width: 205,
   },
   mainImg: {
     paddingHorizontal: Padding.p_6xl,
     paddingVertical: Padding.p_xl,
     alignSelf: "stretch",
+    overflow: 'hidden',
   },
   whatDoesThis: {
     fontSize: FontSize.size_mid,
