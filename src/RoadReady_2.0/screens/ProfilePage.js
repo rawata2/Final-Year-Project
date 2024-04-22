@@ -12,9 +12,108 @@ import { Image } from "expo-image";
 import { useNavigation } from "@react-navigation/native";
 import TitleBar from "../components/TitleBar";
 import { Padding, Color, Border, FontFamily, FontSize } from "../GlobalStyles";
+import { useState } from 'react';
+import { getAuth, updateEmail ,sendEmailVerification, updatePassword, reauthenticateWithCredential, EmailAuthProvider } from 'firebase/auth';
 
 const ProfilePage = () => {
+  const auth = getAuth();
+  const user = auth.currentUser;
   const navigation = useNavigation();
+
+  // State hooks for form inputs
+  const [newEmail, setNewEmail] = useState('');
+  const [currentPassword, setCurrentPassword] = useState('');
+  const [newPassword, setNewPassword] = useState('');
+  const [confirmNewPassword, setConfirmNewPassword] = useState('');
+
+  // Function to validate email format
+  const isValidEmail = (email) => {
+    const regex = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,7}$/;
+    return regex.test(email);
+  };
+
+  // Function to change user email
+  const changeUserEmail = async (newEmail) => {
+    if (!user) {
+      alert('User not authenticated. Please sign in first.');
+      return false;
+    }
+
+    if (!isValidEmail(newEmail)) {
+      alert('Please enter a valid email address.');
+      return false;
+    }
+
+    try {
+      await updateEmail(user, newEmail);
+      await sendEmailVerification(user);
+      alert('Email updated successfully! A verification email has been sent to the new address.');
+      return true;
+    } catch (error) {
+      alert('Error updating email: ' + error.message);
+      return false;
+    }
+  };
+
+  // Function to change user password
+  const changeUserPassword = async (currentPassword, newPassword) => {
+    if (!currentPassword || !newPassword) {
+      alert('Please enter both your current password and a new password.');
+      return false;
+    }
+
+    const credential = EmailAuthProvider.credential(user.email, currentPassword);
+
+    try {
+      // Validate current password
+      await reauthenticateWithCredential(user, credential);
+      // User re-authenticated, now update the password
+      await updatePassword(user, newPassword);
+      return true; // Indicate success
+    } catch (error) {
+      if (error.code === 'auth/wrong-password') {
+        alert('Please type in the correct current password.');
+      } else {
+        alert('Error updating password: ' + error.message);
+      }
+      console.error('Error updating password:', error);
+      return false;
+    }
+  };
+
+  // Combined event handler for changing email and password
+  const handleUpdate = async () => {
+    let emailUpdated = false;
+    let passwordUpdated = false;
+
+    // Check if the user provided a new email and update it
+    if (newEmail) {
+      emailUpdated = await changeUserEmail(newEmail);
+    }
+
+    // Check if the user provided all password fields and update the password
+    if (currentPassword && newPassword && confirmNewPassword) {
+      if (newPassword !== confirmNewPassword) {
+        alert('The new passwords do not match.');
+        return;
+      } else {
+        passwordUpdated = await changeUserPassword(currentPassword, newPassword);
+      }
+    } else if (newPassword || confirmNewPassword) {
+      alert('Please fill in all password fields to update your password.');
+      return;
+    }
+
+    // Alert the user based on what was updated
+    if (emailUpdated || passwordUpdated) {
+      const message = emailUpdated && passwordUpdated
+        ? 'Email and password updated successfully!'
+        : emailUpdated
+        ? 'Email updated successfully!'
+        : 'Password updated successfully!';
+      alert(message);
+    }
+  };
 
   return (
     <View style={styles.profilePage}>
@@ -42,7 +141,7 @@ const ProfilePage = () => {
             source={require("../assets/edit.png")}
           />
           <View style={styles.nameFrame}>
-            <Text style={styles.name}>Name</Text>
+            <Text style={styles.name}> {auth.currentUser.displayName} </Text>
           </View>
         </View>
         <View style={styles.form}>
@@ -55,9 +154,12 @@ const ProfilePage = () => {
               />
             </View>
             <TextInput
-              style={styles.changeEmail}
-              placeholder="Change Email"
-              placeholderTextColor="rgba(0, 0, 0, 0.3)"
+                  style={styles.changeEmail}
+                  placeholder="Change Email"
+                  placeholderTextColor="rgba(0, 0, 0, 0.3)"
+                  value={newEmail}
+                  onChangeText={(text) => setNewEmail(text)}
+                  
             />
           </View>
           <View style={[styles.changePass, styles.passSpaceBlock]}>
@@ -78,6 +180,8 @@ const ProfilePage = () => {
               placeholder="Current Password"
               secureTextEntry={true}
               placeholderTextColor="rgba(0, 0, 0, 0.3)"
+              value={currentPassword}
+              onChangeText={setCurrentPassword}
             />
             <Image
               style={styles.eyeIcon}
@@ -98,6 +202,8 @@ const ProfilePage = () => {
               placeholder="New Password"
               secureTextEntry={true}
               placeholderTextColor="rgba(0, 0, 0, 0.3)"
+              value={newPassword}
+              onChangeText={setNewPassword}
             />
             <Image
               style={styles.eyeIcon}
@@ -118,6 +224,8 @@ const ProfilePage = () => {
               placeholder="Confirm New Password"
               secureTextEntry={true}
               placeholderTextColor="rgba(0, 0, 0, 0.3)"
+              value={confirmNewPassword}
+              onChangeText={setConfirmNewPassword}
             />
             <Image
               style={styles.eyeIcon}
@@ -126,7 +234,7 @@ const ProfilePage = () => {
             />
           </View>
           <View style={[styles.buttons, styles.passSpaceBlock]}>
-            <Pressable style={styles.confirm}>
+          <Pressable style={styles.confirm} onPress={()=> handleUpdate()}>
               <View style={[styles.button, styles.buttonFlexBox]}>
                 <Text
                   style={[styles.confirmChanges, styles.changePasswordTypo]}
@@ -138,7 +246,7 @@ const ProfilePage = () => {
             <TouchableOpacity
               style={styles.signOut}
               activeOpacity={0.2}
-              onPress={() => navigation.navigate("SignIn")}
+              onPress={() => handleSignOut()}
             >
               <View style={[styles.button, styles.buttonFlexBox]}>
                 <Text
@@ -153,7 +261,7 @@ const ProfilePage = () => {
       </ScrollView>
     </View>
   );
-};
+}
 
 const styles = StyleSheet.create({
   mainScrollViewContent: {
