@@ -6,8 +6,8 @@ import {
   View,
   Pressable,
   Modal,
+  Image,
 } from "react-native";
-import { Image } from "expo-image";
 import PopUp from "../components/PopUp";
 import { useNavigation } from "@react-navigation/native";
 import TitleBar from "../components/TitleBar";
@@ -19,7 +19,7 @@ import Results from "./Results";
 const PracticeQs = (props) => {
   const [butttonVisible, setButttonVisible] = useState(false);
   const [num, setNum] = useState("1")
-  const [img, setImg] = useState()
+  const [img, setImg] = useState("../assets/image-20240207-002627370-2.png")
   const [q, setQ] = useState()
   const [a1, setA1] = useState()
   const [a2, setA2] = useState()
@@ -39,6 +39,9 @@ const PracticeQs = (props) => {
   let categories = props.route.params.categories
   const limit = 1
   const coll = collection(db, "Quiz",auth.currentUser.email, "attempts")
+  const navigation = useNavigation();
+  const image = ["../assets/y_image.png","../assets/s_image.png", "../assets/r_image.png" ]
+
 
   const resetQuiz = () => {
     setNum("1")
@@ -103,13 +106,6 @@ const PracticeQs = (props) => {
     }
   }
 
-  // function Marking(){
-  //   if(count >= (categories.length - 1)){() => {
-  //     const score = cat1.length + cat2.length + cat3.length + cat4.length + cat5.length
-  //     setDoc(doc(db, "Quiz", auth.currentUser.email, "attempts", String(docs)),{result: ((score) > (count / 1.33) ? "Pass": "Fail"), score: (String(count + 1) + "/" + String(score))})
-  //   }}
-  // }
-
   useEffect(() => {
     console.log(count >= (categories.length))
     if(count >= (categories.length)) {
@@ -171,7 +167,11 @@ const PracticeQs = (props) => {
               showsVerticalScrollIndicator={true}
               showsHorizontalScrollIndicator={false}
               contentContainerStyle={styles.mainScrollViewContent}
-            >
+            >            
+            <View style={styles.qNum}>
+              <Text style={styles.question1}>Question</Text>
+              <Text style={[styles.text, styles.textTypo]}>{count}/{categories.length}</Text>
+            </View>
               <View style={[styles.category, styles.mainImgSpaceBlock]}>
                 <View style={styles.categoryName}>
                   <Text style={[styles.roadAndTraffic, styles.answerTypo]}>
@@ -182,8 +182,7 @@ const PracticeQs = (props) => {
               <View style={[styles.mainImg, styles.mainImgFlexBox]}>
                 <Image
                   style={styles.qImgPlaceholderIcon}
-                  contentFit="cover"
-                  source={img ? img : require("../assets/image-20240207-002627370-2.png")}
+                  source={img == image[0] ? require("../assets/y_image.png"): img == image[1]? require("../assets/s_image.png") : require("../assets/r_image.png")}
                 />
               </View>
               <View style={[styles.answerSelection, styles.mainImgFlexBox]}>
@@ -194,13 +193,13 @@ const PracticeQs = (props) => {
                 </View>
                 <View style={styles.allans}>
                   <View style={[styles.a, styles.aSpaceBlock]}>
-                    <Pressable onPress={() => setSelect(a1)} style={(select == a1) ? [styles.aParent, styles.parentFlexBoxSelect] : [styles.aParent, styles.parentFlexBox]}>
+                    <Pressable onPress={() => setSelect(a1)} style={ (ans == select && select == a1) ? [styles.aParent, styles.parentFlexBoxCorrect] : (select == a1) ? [styles.aParent, styles.parentFlexBoxSelect] : [styles.aParent, styles.parentFlexBox]}>
                       <Text style={[styles.a1, styles.answerTypo]}>A</Text>
                       <Text style={[styles.answer, styles.answerTypo]}>{a1}</Text>
                     </Pressable>
                   </View>
                   <View style={[styles.b, styles.aSpaceBlock]}>
-                    <Pressable onPress={() => setSelect(a2)} style={(select == a2) ? [styles.bParent, styles.parentFlexBoxSelect] :[styles.bParent, styles.parentFlexBox]}>
+                    <Pressable onPress={() => setSelect(a2)} style={(ans == select && select == a2) ? [styles.aParent, styles.parentFlexBoxCorrect] :(select == a2) ? [styles.bParent, styles.parentFlexBoxSelect] :[styles.bParent, styles.parentFlexBox]}>
                       <Text style={[styles.a1, styles.answerTypo]}>B</Text>
                       <Text style={[styles.answer1, styles.answerTypo]}>
                         {a2}
@@ -208,7 +207,7 @@ const PracticeQs = (props) => {
                     </Pressable>
                   </View>
                   <View style={[styles.b, styles.aSpaceBlock]}>
-                    <Pressable onPress={() => setSelect(a3)} style={(select == a3) ? [styles.bParent, styles.parentFlexBoxSelect] : [styles.bParent, styles.parentFlexBox]}>
+                    <Pressable onPress={() => setSelect(a3)} style={ (ans == select && select == a3) ? [styles.aParent, styles.parentFlexBoxCorrect] :(select == a3) ? [styles.bParent, styles.parentFlexBoxSelect] : [styles.bParent, styles.parentFlexBox]}>
                       <Text style={[styles.a1, styles.answerTypo]}>C</Text>
                       <Text style={[styles.answer2, styles.answerTypo]}>
                         {a3}
@@ -216,7 +215,7 @@ const PracticeQs = (props) => {
                     </Pressable>
                   </View>
                   <View style={[styles.b, styles.aSpaceBlock]}>
-                    <Pressable onPress={() => setSelect(a4)} style={(select == a4) ? [styles.dParent, styles.parentFlexBoxSelect] : [styles.dParent, styles.parentFlexBox]}>
+                    <Pressable onPress={() => setSelect(a4)} style={(ans == select && select == a4) ? [styles.aParent, styles.parentFlexBoxCorrect] :(select == a4) ? [styles.dParent, styles.parentFlexBoxSelect] : [styles.dParent, styles.parentFlexBox]}>
                       <Text style={[styles.a1, styles.answerTypo]}>D</Text>
                       <Text style={[styles.answer3, styles.answerTypo]}>
                         {a4}
@@ -269,8 +268,15 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     letterSpacing: 0,
   },
+  textTypo: {
+    lineHeight: 28,
+    fontSize: FontSize.size_base,
+    textAlign: "left",
+    letterSpacing: 0,
+  },
   mainImgFlexBox: {
     marginTop: 16,
+    display: 'flex',
     justifyContent: "center",
     alignItems: "center",
   },
@@ -289,6 +295,13 @@ const styles = StyleSheet.create({
   parentFlexBoxSelect: {
     paddingVertical: Padding.p_mini,
     backgroundColor: Color.red2,
+    borderRadius: Border.br_3xs,
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  parentFlexBoxCorrect: {
+    paddingVertical: Padding.p_mini,
+    backgroundColor: Color.GreenCorrect,
     borderRadius: Border.br_3xs,
     flexDirection: "row",
     alignItems: "center",
@@ -323,6 +336,28 @@ const styles = StyleSheet.create({
     left: 0,
     top: 0,
   },
+  question1: {
+    fontSize: FontSize.size_lg,
+    lineHeight: 20,
+    textTransform: "capitalize",
+    textAlign: "left",
+    letterSpacing: 0,
+    color: Color.colorText2,
+    fontFamily: FontFamily.robotoRegular,
+  },
+  text: {
+    marginLeft: 20,
+    color: Color.colorText2,
+    fontFamily: FontFamily.robotoRegular,
+    lineHeight: 28,
+    fontSize: FontSize.size_base,
+  },
+  qNum: {
+    justifyContent: "center",
+    flexDirection: "row",
+    alignItems: "center",
+    marginTop: 10,
+  },
   roadAndTraffic: {
     color: Color.lightLabelPrimary,
     alignSelf: "stretch",
@@ -347,14 +382,15 @@ const styles = StyleSheet.create({
     maxWidth: "100%",
     height: 205,
     borderRadius: Border.br_3xs,
-    alignSelf: "stretch",
+    alignSelf: 'center',
     overflow: "hidden",
-    width: "100%",
+    width: 205,
   },
   mainImg: {
     paddingHorizontal: Padding.p_6xl,
     paddingVertical: Padding.p_xl,
     alignSelf: "stretch",
+    overflow: 'hidden',
   },
   whatDoesThis: {
     fontSize: FontSize.size_mid,
@@ -440,9 +476,11 @@ const styles = StyleSheet.create({
   },
   nextButton: {
     backgroundColor: Color.red2,
+    margin: 10,
   },
   button1: {
     marginLeft: 20,
+    marginRight: 20,
     justifyContent: "center",
     alignItems: "center",
     flex: 1,

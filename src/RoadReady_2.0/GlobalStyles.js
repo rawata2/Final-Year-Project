@@ -42,6 +42,7 @@ export const Color = {
   colorGray_100: "#202020",
   colorGray_200: "rgba(45, 43, 43, 0.58)",
   colorFirebrick_100: "rgba(209, 40, 40, 0.91)",
+  GreenCorrect: '#3aeb34',
 };
 /* Paddings */
 export const Padding = {

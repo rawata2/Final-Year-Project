@@ -6,6 +6,7 @@ import {
   View,
   Pressable,
   TouchableOpacity,
+  Linking,
 } from "react-native";
 import { Image } from "expo-image";
 import { useNavigation } from "@react-navigation/native";
@@ -88,7 +89,7 @@ const TheoryTest = () => {
               activeOpacity={0.2}
               onPress={() => navigation.navigate("SignQs")}
             >
-              <View style={styles.innerpractice}>
+              <View style={[styles.innerpractice, styles.roadSigns]}>
                 <Image
                   style={styles.image15Icon}
                   contentFit="cover"
@@ -108,13 +109,20 @@ const TheoryTest = () => {
               styles.iconscontainertheoryFlexBox,
             ]}
           >
-            <RoadTraffic
-              image202402070026273702={require("../assets/studyimg.png")}
-              roadTrafficSigns="Study"
-              propOverflow="unset"
-              propMarginLeft="unset"
-              propWidth={70}
+          <TouchableOpacity
+              style={[styles.practiceqtile, styles.studytileFlexBox]}
+              activeOpacity={0.2}
+              onPress={()=>Linking.openURL('https://www.rsa.ie/services/learner-drivers/resources/rules-of-the-road')}>
+            <Image
+              style={styles.image15Icon}
+              contentFit="cover"
+              source={require("../assets/studyimg.png")}
+
             />
+              <View style={styles.innerprogression}>
+                <Text style={styles.testHistoryTypo}>Study</Text>
+              </View>
+            </TouchableOpacity>
             <TouchableOpacity
               style={[styles.progressiontile, styles.practiceqtileFlexBox]}
               activeOpacity={0.2}
@@ -176,6 +184,16 @@ const styles = StyleSheet.create({
     justifyContent: "flex-end",
     borderRadius: Border.br_3xs,
     flex: 1,
+    marginRight: 10
+  },
+  studytileFlexBox: {
+    paddingRight: 13,
+    padding: Padding.p_3xs,
+    backgroundColor: Color.colorDarkslategray_200,
+    justifyContent: "flex-end",
+    borderRadius: Border.br_3xs,
+    flex: 1,
+    marginRight: -10
   },
   testHistoryTypo: {
     color: Color.lightLabelPrimary,
@@ -277,10 +295,13 @@ const styles = StyleSheet.create({
   },
   image15Icon: {
     width: 80,
-    height: 70,
+    height: 80,
   },
   practiceQuestions: {
     marginTop: 8,
+  },
+  roadSigns: {
+    marginLeft: 8,
   },
   innerpractice: {
     justifyContent: "flex-end",

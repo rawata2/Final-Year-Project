@@ -81,12 +81,12 @@ const SidePanel1 = ({ state, navigation }) => {
             <Image
               style={styles.group3Icon}
               contentFit="cover"
-              source={require("../assets/group3.png")}
+              source={require("../assets/pngwing.com.png")}
             />
           </View>
           <View style={styles.helloParent}>
             <Text style={styles.hello}>Hello</Text>
-            <Text style={[styles.user, styles.userTypo]}>{auth.currentUser.displayName}</Text>
+            <Text style={[styles.user, styles.userTypo]}>{auth.currentUser.displayName ? auth.currentUser.displayName : "User"}</Text>
           </View>
         </View>
         <View style={styles.menuChild} />

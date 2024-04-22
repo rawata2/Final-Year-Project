@@ -5,7 +5,7 @@ import { useNavigation } from "@react-navigation/native";
 import { Padding, Color, Border, FontSize, FontFamily } from "../GlobalStyles";
 import { auth, db } from '../firebaseConfig'
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth"
-import { doc, getDoc, setDoc, collection } from "firebase/firestore";
+import { doc, setDoc } from "firebase/firestore";
 
 const Form = () => {
   const [username, setUsername] = useState('')

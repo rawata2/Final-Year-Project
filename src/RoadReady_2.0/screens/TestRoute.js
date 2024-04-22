@@ -1,12 +1,14 @@
 import * as React from "react";
-import { ScrollView, Text, StyleSheet, Pressable, View } from "react-native";
+import { ScrollView, Text, StyleSheet, Pressable, View, Platform } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import TitleBar from "../components/TitleBar";
 import { Padding, Color, Border, FontFamily, FontSize } from "../GlobalStyles";
+import { Image } from "expo-image";
 
-const TestRoute = () => {
+const TestRoute = ({route}) => {
   const navigation = useNavigation();
-
+  const name = route.params.name
+  console.log(name)
   return (
     <View style={[styles.testRoute, styles.testFlexBox]}>
       <TitleBar
@@ -26,11 +28,35 @@ const TestRoute = () => {
           <Pressable style={[styles.charlestown, styles.charlestownSpaceBlock]}>
             <Text style={[styles.route1, styles.routeTypo]}>Route 1</Text>
           </Pressable>
+          {name ==  "charlestown" ?
+            <View>
+              <Image style={{height: 205, width:205}} source={require("../assets/charlestown.png")}/>
+            </View>
+            : name == "Finglas" ?
+            <View>
+              <Image style={{height: 205, width:205}} source={require("../assets/finglas.png")}/>
+            </View>
+            : 
+            <View>
+            </View>
+            }
           <Pressable
             style={[styles.dunLaoghaire, styles.charlestownSpaceBlock]}
           >
             <Text style={[styles.route2, styles.routeTypo]}>Route 2</Text>
           </Pressable>
+          {name ==  "charlestown" ?
+            <View>
+              <Image style={{height: 205, width:205}} source={require("../assets/charlestown2.png")}/>
+            </View>
+            : name == "Finglas" ?
+            <View>
+              <Image style={{height: 205, width:205}} source={require("../assets/finglas2.png")}/>
+            </View>
+            : 
+            <View>
+            </View>
+            }
           <Pressable
             style={[styles.dunLaoghaire, styles.charlestownSpaceBlock]}
           >
@@ -54,7 +80,7 @@ const TestRoute = () => {
         </View>
       </ScrollView>
     </View>
-  );
+  )
 };
 
 const styles = StyleSheet.create({
