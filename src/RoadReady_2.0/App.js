@@ -144,6 +144,16 @@ function DrawerRoot({ navigation }) {
         options={{ headerShown: false }}
         initialParams = {{"categories" : both}}
       />
+      <Drawer.Screen
+        name="Results"
+        component={Results}
+        options={{ headerShown: false }}
+      />
+      <Drawer.Screen
+        name="TestHistory"
+        component={TestHistory}
+        options={{ headerShown: false }}
+      />
     </Drawer.Navigator>
   );
 }

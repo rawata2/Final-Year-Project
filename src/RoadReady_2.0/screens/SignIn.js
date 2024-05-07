@@ -26,7 +26,7 @@ const SignIn = () => {
     .then(userCredentials => {
       const user = userCredentials.user;
       console.log('Logged in with:', user.email);
-      navigation.navigate('HomePage')
+      navigation.navigate("DrawerRoot", { screen: "BottomTabsRoot" })
     })
     .catch(error => alert(error.message))
   }
@@ -42,8 +42,8 @@ const SignIn = () => {
   
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged(user => {
-      if (user) {
-        navigation.navigate('HomePage')
+      if (user) {() =>
+        navigation.navigate("DrawerRoot", { screen: "BottomTabsRoot" })
       }
     })
 
@@ -104,8 +104,7 @@ const SignIn = () => {
             <Pressable
               style={[styles.signInButton, styles.signInButtonFlexBox]}
               activeOpacity={0.2}
-              onPress={() => handleLogin()
-              }
+              onPress={() => handleLogin()}
             >
               <Text style={[styles.signIn3, styles.signIn3Typo]}>Sign In</Text>
             </Pressable>

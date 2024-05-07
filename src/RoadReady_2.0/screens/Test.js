@@ -146,9 +146,6 @@ const Test = (props) => {
 
   const docRef = doc(db, categories[cat], num);
 
-  
-
-
   return (
     <>
     {(() => {
@@ -158,7 +155,7 @@ const Test = (props) => {
             <TitleBar
               home="Quit"
               hamburgerOnOffFlex={1}
-              onButttonPress={() => navigation.goBack()}
+              onButttonPress={openButtton}
               onHamburgerOnOffPress={() => navigation.toggleDrawer()} />
             <ScrollView
               style={styles.main}
@@ -245,6 +242,7 @@ const Test = (props) => {
               </View>
             </ScrollView>
           </View>
+          
   );
     } else {
       return (
@@ -252,6 +250,13 @@ const Test = (props) => {
       );
     }
     })()}
+
+      <Modal animationType="fade" transparent visible={butttonVisible}>
+        <View style={styles.butttonOverlay}>
+          <Pressable style={styles.butttonBg} onPress={closeButtton} />
+          <PopUp onClose={closeButtton} />
+        </View>
+      </Modal>
     </>
   )
 }

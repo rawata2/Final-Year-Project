@@ -45,13 +45,8 @@ const HomePage = () => {
         />
         <View style={styles.alltiles}>
           <View style={[styles.iconscontainer, styles.driverIcon2FlexBox]}>
-            <TouchableOpacity
-              style={styles.drivingiconFlexBox}
-              activeOpacity={0.2}
-              onPress={() =>
-                navigation.navigate("DrawerRoot", { screen: "DrivingTest" })
-              }
-            >
+          <Pressable style={styles.drivingiconFlexBox}
+              onPress={() => navigation.navigate('DrivingTest')}>
               <View style={styles.image}>
                 <Image
                   style={[styles.testIcon, styles.iconLayout]}
@@ -62,12 +57,12 @@ const HomePage = () => {
                   Driving test
                 </Text>
               </View>
-            </TouchableOpacity>
+            </Pressable>
             <TouchableOpacity
               style={[styles.learnericon, styles.drivingiconFlexBox]}
               activeOpacity={0.2}
               onPress={() =>
-                navigation.navigate("DrawerRoot", { screen: "TheoryTest" })
+                navigation.navigate('TheoryTest')
               }
             >
               <View style={styles.image}>
@@ -87,7 +82,7 @@ const HomePage = () => {
               style={styles.drivingiconFlexBox}
               activeOpacity={0.2}
               onPress={() =>
-                navigation.navigate("DrawerRoot", { screen: "FindInstructors" })
+                navigation.navigate('FindInstructors')
               }
             >
               <View style={styles.image}>
@@ -105,7 +100,7 @@ const HomePage = () => {
               style={[styles.learnericon, styles.drivingiconFlexBox]}
               activeOpacity={0.2}
               onPress={() =>
-                navigation.navigate("DrawerRoot", { screen: "RoutesPage" })
+                navigation.navigate("RoutesPage")
               }
             >
               <View style={styles.image}>

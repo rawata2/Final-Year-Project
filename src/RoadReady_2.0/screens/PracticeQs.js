@@ -132,7 +132,7 @@ const PracticeQs = (props) => {
     };
   
     fetchDoc();
-  }, [cat, num]);
+  }, [cat]);
 
   const docRef = doc(db, categories[cat], num);
 
@@ -155,7 +155,6 @@ const PracticeQs = (props) => {
               home="Quit"
               hamburgerOnOffFlex={1}
               onButttonPress={openButtton}
-              onHamburgerOnOffPress={() => navigation.toggleDrawer()}
             />
             <ScrollView
               style={styles.main}

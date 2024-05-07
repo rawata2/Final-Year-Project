@@ -24,14 +24,14 @@ const PopUp = ({ onClose }) => {
         <View style={[styles.buttons, styles.popUpFlexBox]}>
           <Pressable style={styles.buttonLayout}>
             <View style={[styles.button, styles.buttonFlexBox]}>
-              <Text  style={[styles.noIWant, styles.youFlexBox]}>
+              <Text onPress={onClose}  style={[styles.noIWant, styles.youFlexBox]}>
                 No, I want to continue
               </Text>
             </View>
           </Pressable>
           <Pressable style={[styles.quitButton, styles.buttonLayout]}>
             <View style={[styles.button1, styles.buttonFlexBox]}>
-              <Text onPress={() => navigation.navigate("TheoryTest")} style={[styles.noIWant, styles.youFlexBox]}>Yes, :(</Text>
+              <Text onPress={() => [onClose(), navigation.navigate("TheoryTest")]} style={[styles.noIWant, styles.youFlexBox]}>Yes, :(</Text>
             </View>
           </Pressable>
         </View>

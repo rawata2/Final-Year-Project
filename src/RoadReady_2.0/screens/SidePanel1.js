@@ -31,11 +31,11 @@ const SidePanel1 = ({ state, navigation }) => {
     <Group1 />,
   ]);
   const [drawerItemsActive] = useState([
-    <ProfileOnOffIcon1 />,
-    <HomeOnOffIcon2 />,
-    <DrivingOnOff2 />,
-    <TheoryOnOffIcon2 />,
-    <InstructorsOnOffIcon2 />,
+    <Group2 />,
+    <Group />,
+    <Group4 />,
+    <Group5 />,
+    <Group3 />,
     <Group1 />,
   ]);
   const stateIndex = !state ? 0 : state.index - 1;
