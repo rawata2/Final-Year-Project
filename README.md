@@ -17,5 +17,14 @@ We aim to design the mobile  app “RoadReady” that transforms the way people 
 
 - <img src="https://seeklogo.com/images/E/expo-go-app-logo-BBBE394CB8-seeklogo.com.png" width="25" height="29"> **Expo go** is the environment we will use to test our app.
 
+### Running the App
+- npx expo start
+- npx expo start --android (Android Users)
+- npx expo start --ios (Iphone Users)
+- npx expo start --web (Web Users)
+
+If expo wont run on the phone try
+- npx expo start --tunnel
+
 
 
