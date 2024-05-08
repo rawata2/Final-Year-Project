@@ -153,10 +153,10 @@ const Test = (props) => {
         return (
       <View style={styles.test}>
             <TitleBar
-              home="Quit"
-              hamburgerOnOffFlex={1}
-              onButttonPress={openButtton}
-              onHamburgerOnOffPress={() => navigation.toggleDrawer()} />
+            home="Quit"
+            onButttonPress={openButtton}
+            showHamburgerIcon={false} // This  hides the hamburger icon
+          />
             <ScrollView
               style={styles.main}
               showsVerticalScrollIndicator={true}

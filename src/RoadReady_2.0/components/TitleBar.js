@@ -20,6 +20,7 @@ const TitleBar = ({
   home,
   hamburgerOnOffFlex,
   onButttonPress,
+  showHamburgerIcon = true,
   onHamburgerOnOffPress,
 }) => {
   const homeStyle = useMemo(() => {
@@ -43,17 +44,19 @@ const TitleBar = ({
           <Text style={[styles.home, homeStyle]}>{home}</Text>
         </Pressable>
       </View>
-      <TouchableOpacity
-        style={styles.hamburgerOnOff}
-        activeOpacity={0.2}
-        onPress={onHamburgerOnOffPress}
-      >
-        <Image
-          style={styles.vectorIcon}
-          contentFit="cover"
-          source={require("../assets/vector32.png")}
-        />
-      </TouchableOpacity>
+      {showHamburgerIcon && (
+        <TouchableOpacity
+          style={styles.hamburgerOnOff}
+          activeOpacity={0.2}
+          onPress={onHamburgerOnOffPress}
+        >
+          <Image
+            style={styles.vectorIcon}
+            contentFit="cover"
+            source={require("../assets/vector32.png")}
+          />
+        </TouchableOpacity>
+      )}
     </View>
   );
 };

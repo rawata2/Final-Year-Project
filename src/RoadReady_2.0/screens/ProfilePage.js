@@ -13,7 +13,7 @@ import { useNavigation } from "@react-navigation/native";
 import TitleBar from "../components/TitleBar";
 import { Padding, Color, Border, FontFamily, FontSize } from "../GlobalStyles";
 import { useState } from 'react';
-import { getAuth, signOut, updateEmail ,sendEmailVerification, updatePassword, reauthenticateWithCredential, EmailAuthProvider } from 'firebase/auth';
+import { getAuth, signOut, updateEmail, sendEmailVerification, updatePassword, reauthenticateWithCredential, EmailAuthProvider } from 'firebase/auth';
 
 const ProfilePage = () => {
   const auth = getAuth();
@@ -22,10 +22,13 @@ const ProfilePage = () => {
 
   // State hooks for form inputs
   const [newEmail, setNewEmail] = useState('');
-  const [currentPassword, setCurrentPassword] = useState('');
-  const [newPassword, setNewPassword] = useState('');
-  const [confirmNewPassword, setConfirmNewPassword] = useState('');
-
+  const [currentPassword, setCurrentPassword] = useState(''); // Added state for current password
+  const [newPassword, setNewPassword] = useState(''); // Added state for new password
+  const [confirmNewPassword, setConfirmNewPassword] = useState(''); // Added state for confirm new password
+  const [currentPasswordVisible, setCurrentPasswordVisible] = useState(false);
+  const [newPasswordVisible, setNewPasswordVisible] = useState(false);
+  const [confirmNewPasswordVisible, setConfirmNewPasswordVisible] = useState(false);
+  
     // Function to sign out the user
     const handleSignOut = async () => {
       try {
@@ -189,16 +192,18 @@ const changeUserPassword = async (currentPassword, newPassword) => {
             <TextInput
               style={styles.changeEmail}
               placeholder="Current Password"
-              secureTextEntry={true}
+              secureTextEntry={!currentPasswordVisible}
               placeholderTextColor="rgba(0, 0, 0, 0.3)"
               value={currentPassword}
               onChangeText={setCurrentPassword}
             />
-            <Image
-              style={styles.eyeIcon}
-              contentFit="cover"
-              source={require("../assets/eye-icon11.png")}
-            />
+            <Pressable onPress={() => setCurrentPasswordVisible(!currentPasswordVisible)}>
+              <Image
+                style={styles.eyeIcon}
+                contentFit="cover"
+                source={currentPasswordVisible ? require("../assets/eye-icon.png") : require("../assets/eye-icon.png")}
+              />
+            </Pressable>
           </View>
           <View style={[styles.newPass, styles.passSpaceBlock]}>
             <View style={[styles.passwordIcon, styles.iconLayout]}>
@@ -208,20 +213,22 @@ const changeUserPassword = async (currentPassword, newPassword) => {
                 source={require("../assets/vector51.png")}
               />
             </View>
-            <TextInput
-              style={styles.changeEmail}
-              placeholder="New Password"
-              secureTextEntry={true}
-              placeholderTextColor="rgba(0, 0, 0, 0.3)"
-              value={newPassword}
-              onChangeText={setNewPassword}
-            />
-            <Image
-              style={styles.eyeIcon}
-              contentFit="cover"
-              source={require("../assets/eye-icon11.png")}
-            />
-          </View>
+              <TextInput
+                style={styles.changeEmail}
+                placeholder="New Password"
+                secureTextEntry={!newPasswordVisible}
+                placeholderTextColor="rgba(0, 0, 0, 0.3)"
+                value={newPassword}
+                onChangeText={setNewPassword}
+              />
+              <Pressable onPress={() => setNewPasswordVisible(!newPasswordVisible)}>
+                <Image
+                  style={styles.eyeIcon}
+                  contentFit="cover"
+                  source={newPasswordVisible ? require("../assets/eye-icon.png") : require("../assets/eye-icon.png")}
+                />
+          </Pressable>
+        </View>
           <View style={[styles.newPass, styles.passSpaceBlock]}>
             <View style={[styles.passwordIcon, styles.iconLayout]}>
               <Image
@@ -233,17 +240,19 @@ const changeUserPassword = async (currentPassword, newPassword) => {
             <TextInput
               style={styles.changeEmail}
               placeholder="Confirm New Password"
-              secureTextEntry={true}
+              secureTextEntry={!confirmNewPasswordVisible}
               placeholderTextColor="rgba(0, 0, 0, 0.3)"
               value={confirmNewPassword}
               onChangeText={setConfirmNewPassword}
             />
-            <Image
-              style={styles.eyeIcon}
-              contentFit="cover"
-              source={require("../assets/eye-icon11.png")}
-            />
-          </View>
+            <Pressable onPress={() => setConfirmNewPasswordVisible(!confirmNewPasswordVisible)}>
+              <Image
+                style={styles.eyeIcon}
+                contentFit="cover"
+                source={confirmNewPasswordVisible ? require("../assets/eye-icon.png") : require("../assets/eye-icon.png")}
+              />
+            </Pressable>
+         </View>
           <View style={[styles.buttons, styles.passSpaceBlock]}>
           <Pressable style={styles.confirm} onPress={()=> handleUpdate()}>
               <View style={[styles.button, styles.buttonFlexBox]}>

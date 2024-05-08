@@ -17,7 +17,7 @@ import { signInWithEmailAndPassword } from "firebase/auth"
 const SignIn = () => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-
+  const [passwordVisible, setPasswordVisible] = useState(false);
   const navigation = useNavigation();
 
   
@@ -42,13 +42,14 @@ const SignIn = () => {
   
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged(user => {
-      if (user) {() =>
-        navigation.navigate("DrawerRoot", { screen: "BottomTabsRoot" })
+      if (user) {
+        navigation.navigate("DrawerRoot", { screen: "BottomTabsRoot" });
       }
-    })
-
-    return unsubscribe
-  }, [])
+    });
+  
+    return unsubscribe;
+  }, []);
+  
   
   return (
     <View style={[styles.signIn, styles.signInFlexBox]}>
@@ -87,16 +88,19 @@ const SignIn = () => {
             <TextInput
               style={styles.emailOrUsername1}
               placeholder="Password"
-              secureTextEntry={true}
+              secureTextEntry={!passwordVisible} // Toggle visibility
               placeholderTextColor="rgba(0, 0, 0, 0.3)"
               onChangeText={(text) => setPassword(text)}
-            />
-            <Image
-              style={[styles.eyeIcon, styles.eyeIconLayout]}
-              contentFit="cover"
-              source={require("../assets/eye-icon11.png")}
-            />
-          </View>
+              />
+
+        <Pressable onPress={() => setPasswordVisible(!passwordVisible)}>
+          <Image
+            style={[styles.eyeIcon, styles.eyeIconLayout]}
+            contentFit="cover"
+            source={passwordVisible ? require("../assets/eye-icon.png") : require("../assets/eye-icon.png")}
+          />
+        </Pressable>
+        </View>
           <Pressable
             style={[styles.signIn2, styles.footerSpaceBlock]}
             onPress={() => handleLogin()}

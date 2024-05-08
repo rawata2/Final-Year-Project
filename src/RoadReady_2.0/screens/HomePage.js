@@ -28,10 +28,24 @@ const HomePage = () => {
 
 
   return (
-    <View style={[styles.homepage, styles.homepageLayout]}>
+   <View style={[styles.homepage, styles.homepageLayout]}>
       <View style={[styles.titlebar, styles.titlebarFlexBox]}>
-      <Text style={styles.titlefont}>Welcome {auth.currentUser.displayName ? auth.currentUser.displayName : "User" }</Text>
+        <View style={styles.greet}>
+            <Text style={styles.helloUser}>Hello, {auth.currentUser.displayName ? auth.currentUser.displayName : "User" }</Text>
+        </View>
+        <TouchableOpacity
+          style={[styles.hamburgerOnOff, styles.iconLayout1]}
+          activeOpacity={0.2}
+          onPress={() => navigation.toggleDrawer()}
+        >
+          <Image
+            style={styles.vectorIcon}
+            contentFit="cover"
+            source={require("../assets/vector32.png")}
+          />
+        </TouchableOpacity>
       </View>
+
       <ScrollView
         style={styles.main}
         showsVerticalScrollIndicator={true}

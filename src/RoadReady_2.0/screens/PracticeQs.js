@@ -132,7 +132,7 @@ const PracticeQs = (props) => {
     };
   
     fetchDoc();
-  }, [cat]);
+}, [cat, num])
 
   const docRef = doc(db, categories[cat], num);
 
@@ -151,11 +151,11 @@ const PracticeQs = (props) => {
       if (count < (categories.length)) {
         return (
           <View style={styles.practiceQs}>
-            <TitleBar
-              home="Quit"
-              hamburgerOnOffFlex={1}
-              onButttonPress={openButtton}
-            />
+           <TitleBar
+            home="Quit"
+            onButttonPress={openButtton}
+            showHamburgerIcon={false} // This  hides the hamburger icon
+          />
             <ScrollView
               style={styles.main}
               showsVerticalScrollIndicator={true}

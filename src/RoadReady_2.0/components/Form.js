@@ -11,8 +11,9 @@ const Form = () => {
   const [username, setUsername] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [passwordVisible, setPasswordVisible] = useState(false);
   const [docState, setDocState] = useState()
-
+  
   const navigation = useNavigation();
 
   useEffect(() => {
@@ -83,15 +84,17 @@ const Form = () => {
         <TextInput
           style={styles.fullName}
           placeholder="Password"
-          secureTextEntry={true}
+          secureTextEntry={!passwordVisible} // Toggle visibility
           placeholderTextColor="rgba(0, 0, 0, 0.3)"
           onChangeText={text => setPassword(text)}
         />
-        <Image
-          style={styles.eyeIcon}
-          contentFit="cover"
-          source={require("../assets/eye-icon.png")}
-        />
+        <Pressable onPress={() => setPasswordVisible(!passwordVisible)}>
+          <Image
+            style={styles.eyeIcon}
+            contentFit="cover"
+            source={passwordVisible ? require("../assets/eye-icon.png") : require("../assets/eye-icon.png")} // Toggle icon based on visibility
+          />
+        </Pressable>
       </View>
       <Pressable
         style={[styles.signup, styles.signupSpaceBlock]}
