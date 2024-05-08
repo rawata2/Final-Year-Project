@@ -38,9 +38,11 @@ const PracticeQs = (props) => {
   
   let categories = props.route.params.categories
   const limit = 1
-  const coll = collection(db, "Quiz",auth.currentUser.email, "attempts")
+  const [coll,_] = useState(collection(db, "Quiz",auth.currentUser.email, "attempts"))
   const navigation = useNavigation();
-  const image = ["../assets/y_image.png","../assets/s_image.png", "../assets/r_image.png" ]
+  const image = ["../assets/y_image.png","../assets/s_image.png", "../assets/r_image.png", "../assets/tyre_image.png",  "../assets/aware_image.png", "../assets/arrow_image.png", 
+  "../assets/burn_image.png", 
+  "../assets/brake_image.png"]
 
 
   const resetQuiz = () => {
@@ -56,20 +58,6 @@ const PracticeQs = (props) => {
     setDocs(null)
   }
   
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const snapshot = await getDocs(coll);
-        const numDocs = snapshot.size;
-        setDocs(numDocs + 1)
-        // Handle the snapshot data as needed
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
-
-    fetchData();
-  }, [coll]);
 
   function NextQ(){
     setCount(count + 1)
@@ -106,9 +94,23 @@ const PracticeQs = (props) => {
   }
 
   useEffect(() => {
+      const fetchAttempts = async () => {
+    try {
+      const snapshot = await getDocs(coll);
+      // const snapshot = {size: 0}
+      const numDocs = snapshot.size;
+      return numDocs + 1
+      // Handle the snapshot data as needed
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
     if(count >= (categories.length)) {
       const score = cat1.length + cat2.length + cat3.length + cat4.length + cat5.length
-      setDoc(doc(db, "Quiz", auth.currentUser.email, "attempts", String(docs)),{result: ((score) > (count / 1.33) ? "Pass": "Fail"), score: (String(score) + "/" + (String(count)))})
+      fetchAttempts().then((attempts_test) => {
+        setDoc(doc(db, "Quiz", auth.currentUser.email, "attempts", String(attempts_test)),{result: ((score) > (count / 1.33) ? "Pass": "Fail"), score: (String(score) + "/" + (String(count)))})
+      })
+      .catch((e) => {console.error(e)})
     }
   }, [count])
 
@@ -132,9 +134,10 @@ const PracticeQs = (props) => {
     };
   
     fetchDoc();
-}, [cat, num])
+  }, [cat, num]);
 
   const docRef = doc(db, categories[cat], num);
+  console.log("awhjidfaywuowfyoaw", img)
 
 
   const openButtton = useCallback(() => {
@@ -176,7 +179,7 @@ const PracticeQs = (props) => {
               <View style={[styles.mainImg, styles.mainImgFlexBox]}>
                 <Image
                   style={styles.qImgPlaceholderIcon}
-                  source={img == image[0] ? require("../assets/y_image.png"): img == image[1]? require("../assets/s_image.png") : require("../assets/r_image.png")}
+                  source={img == image[0] ? require("../assets/y_image.png"): img == image[1]? require("../assets/s_image.png") :img == image[2]? require("../assets/r_image.png"): img == image[3]? require("../assets/tyre_image.png") : img == image[4]? require("../assets/aware_image.png"): img == image[5]? require("../assets/arrow_image.png"): img == image[6]? require("../assets/burn_image.png") : require("../assets/brake_image.png")}
                 />
               </View>
               <View style={[styles.answerSelection, styles.mainImgFlexBox]}>

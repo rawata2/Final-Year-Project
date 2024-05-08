@@ -41,6 +41,9 @@ const Test = (props) => {
   let categories = props.route.params.categories
   const limit = 1
   const coll = collection(db, "Quiz",auth.currentUser.email, "attempts")
+  const image = ["../assets/y_image.png","../assets/s_image.png", "../assets/r_image.png", "../assets/tyre_image.png",  "../assets/aware_image.png", "../assets/arrow_image.png", 
+  "../assets/burn_image.png", 
+  "../assets/brake_image.png"]
 
   const navigation = useNavigation();
 
@@ -183,7 +186,7 @@ const Test = (props) => {
                 <Image
                   style={styles.qImgPlaceholderIcon}
                   contentFit="cover"
-                  source={require("../assets/q-img-placeholder.png")} />
+                  source={img == image[0] ? require("../assets/y_image.png"): img == image[1]? require("../assets/s_image.png") :img == image[2]? require("../assets/r_image.png"): img == image[3]? require("../assets/tyre_image.png") : img == image[4]? require("../assets/aware_image.png"): img == image[5]? require("../assets/arrow_image.png"): img == image[6]? require("../assets/burn_image.png") : require("../assets/brake_image.png")}/>
               </View>
               <View style={[styles.answerSelection, styles.mainImgFlexBox]}>
                 <View style={[styles.question1, styles.aSpaceBlock]}>
@@ -487,6 +490,7 @@ const styles = StyleSheet.create({
   },
   button1: {
     marginLeft: 20,
+    marginRight: 20,
     justifyContent: "center",
     alignItems: "center",
     flex: 1,
