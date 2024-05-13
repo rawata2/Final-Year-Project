@@ -37,3 +37,10 @@ npx expo start --tunnel
 ## Other issues?
 - Message me
 
+
+## App Screenshots
+
+| Home Screen               | Theory Questions          | Feedback Dashboard        |
+|---------------------------|---------------------------|---------------------------|
+| ![image](https://github.com/rawata2/Final-Year-Project/assets/72453093/4b1d4369-78e2-44c6-b23c-118127e3068d) | ![image](https://github.com/rawata2/Final-Year-Project/assets/72453093/ebbaf3d2-3464-4b94-a837-8fb8467eb951) | ![image](https://github.com/rawata2/Final-Year-Project/assets/72453093/44b758c7-2fb6-42b9-8efc-cfc276853710) |
+
